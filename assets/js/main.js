@@ -213,3 +213,23 @@
   var y = document.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();
 })();
+
+/* 다크/라이트 모드 토글 */
+(function () {
+  var root = document.documentElement;
+  var btn = document.querySelector(".theme-toggle");
+  var meta = document.querySelector('meta[name="theme-color"]');
+  function apply(t, save) {
+    root.setAttribute("data-theme", t);
+    if (btn) { btn.setAttribute("aria-checked", t === "dark" ? "true" : "false"); btn.setAttribute("aria-label", t === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"); }
+    if (meta) meta.setAttribute("content", t === "dark" ? "#0b0b0b" : "#ffffff");
+    if (save) { try { localStorage.setItem("navig-theme", t); } catch (e) {} }
+  }
+  apply(root.getAttribute("data-theme") === "dark" ? "dark" : "light", false);
+  if (btn) btn.addEventListener("click", function () { apply(root.getAttribute("data-theme") === "dark" ? "light" : "dark", true); });
+  if (window.matchMedia) {
+    var mq = matchMedia("(prefers-color-scheme: dark)");
+    var on = function (e) { var s = null; try { s = localStorage.getItem("navig-theme"); } catch (x) {} if (!s) apply(e.matches ? "dark" : "light", false); };
+    if (mq.addEventListener) mq.addEventListener("change", on); else if (mq.addListener) mq.addListener(on);
+  }
+})();
