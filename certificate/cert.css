@@ -99,3 +99,10 @@ html[data-theme="dark"] .c-mascot img { filter: drop-shadow(0 30px 50px rgba(0,0
   html[data-theme="dark"] .c-sticky { background: #f2f2f0; color: #0b0b0b; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
   .site-footer { padding-bottom: 96px; }
 }
+
+.c-fig.c-clay picture { display: block; width: 100%; }
+.c-fig.c-clay img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 20px; }
+.c-legal { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line); max-width: 760px; font-size: 13px; line-height: 1.7; color: var(--gray-2); }
+.c-legal-t { font-weight: 700; margin-bottom: 6px; }
+.c-legal ul { margin: 0; padding-left: 18px; }
+.c-legal li + li { margin-top: 2px; }
