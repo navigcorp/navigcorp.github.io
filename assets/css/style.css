@@ -361,3 +361,7 @@ html[data-theme="dark"] .marquee-track img { filter: brightness(0) invert(1); op
 .marquee-track li.wm span { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; color: #000; opacity: .78; }
 html[data-theme="dark"] .marquee-track li.wm span { color: #fff; opacity: .82; }
 @media (max-width: 860px) { .marquee-track li.wm span { font-size: 15px; } }
+.marquee-track li.wm-emb { gap: 10px; }
+.marquee-track li.wm-emb img { height: 30px; width: auto; max-width: none; filter: brightness(0); opacity: .78; }
+html[data-theme="dark"] .marquee-track li.wm-emb img { filter: brightness(0) invert(1); opacity: .82; }
+@media (max-width: 860px) { .marquee-track li.wm-emb img { height: 24px; } }
