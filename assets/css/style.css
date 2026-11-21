@@ -365,3 +365,17 @@ html[data-theme="dark"] .marquee-track li.wm span { color: #fff; opacity: .82; }
 .marquee-track li.wm-emb img { height: 30px; width: auto; max-width: none; filter: brightness(0); opacity: .78; }
 html[data-theme="dark"] .marquee-track li.wm-emb img { filter: brightness(0) invert(1); opacity: .82; }
 @media (max-width: 860px) { .marquee-track li.wm-emb img { height: 24px; } }
+
+/* 모바일 메뉴 오버레이: 라이트/다크 토글을 따른다 */
+@media (max-width: 860px) {
+  .site-nav { background: var(--white); color: var(--ink); }
+  body.nav-open .site-header, body.nav-open .site-header.is-scrolled { color: var(--ink); }
+  body.nav-open .site-header .logo img { filter: none; }
+  html[data-theme="dark"] body.nav-open .site-header .logo img { filter: invert(1); }
+  body.nav-open .theme-toggle { border-color: var(--line); background: var(--panel); }
+  body.nav-open .tt-knob { background: var(--ink); }
+  body.nav-open .tt-sun { color: var(--white); }
+  body.nav-open .tt-moon { color: var(--gray-2); }
+  html[data-theme="dark"] body.nav-open .tt-sun { color: var(--gray-2); }
+  html[data-theme="dark"] body.nav-open .tt-moon { color: var(--white); }
+}
