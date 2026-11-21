@@ -379,3 +379,7 @@ html[data-theme="dark"] .marquee-track li.wm-emb img { filter: brightness(0) inv
   html[data-theme="dark"] body.nav-open .tt-sun { color: var(--gray-2); }
   html[data-theme="dark"] body.nav-open .tt-moon { color: var(--white); }
 }
+
+/* 소식 하단: 자동 연동 문구 제거 후 버튼만 오른쪽 정렬 */
+.news-foot { justify-content: flex-end; }
+@media (max-width: 860px) { .news-foot { align-items: flex-start; justify-content: flex-start; margin-top: 32px; } }
