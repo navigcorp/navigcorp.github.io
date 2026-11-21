@@ -72,12 +72,30 @@
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
     });
     document.querySelectorAll(".site-nav a").forEach(function (a) {
-      a.addEventListener("click", function () {
+      a.addEventListener("click", function (e) {
+        // 모바일에서 Services 글자를 누르면 이동 대신 하위 메뉴를 펼친다
+        if (a.classList.contains("sub-link") && window.matchMedia("(max-width: 860px)").matches) {
+          e.preventDefault();
+          var box = a.closest(".has-sub"), on = !box.classList.contains("is-open");
+          box.classList.toggle("is-open", on);
+          box.querySelector(".sub-toggle").setAttribute("aria-expanded", on ? "true" : "false");
+          return;
+        }
         document.body.classList.remove("nav-open");
         toggle.setAttribute("aria-expanded", "false");
       });
     });
   }
+
+  // 5-1) Services 하위 메뉴: 화살표 버튼(클릭·Enter·Space), 바깥 클릭·Esc로 닫기
+  document.querySelectorAll(".has-sub").forEach(function (box) {
+    var btn = box.querySelector(".sub-toggle");
+    function setOpen(on) { box.classList.toggle("is-open", on); btn.setAttribute("aria-expanded", on ? "true" : "false"); }
+    btn.addEventListener("click", function () { setOpen(!box.classList.contains("is-open")); });
+    document.addEventListener("click", function (e) { if (!box.contains(e.target) && !window.matchMedia("(max-width: 860px)").matches) setOpen(false); });
+    box.addEventListener("keydown", function (e) { if (e.key === "Escape") { setOpen(false); btn.focus(); } });
+    box.addEventListener("mouseleave", function () { if (!window.matchMedia("(max-width: 860px)").matches) setOpen(false); });
+  });
 
   // 6) 스크롤 등장
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
