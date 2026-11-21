@@ -42,10 +42,21 @@
     <nav class="site-nav" id="site-nav" aria-label="주요 메뉴">
       <a href="#about">About</a>
       <a href="#work">Work</a>
-      <a href="#services">Services</a>
+      <div class="has-sub">
+        <a href="#services" class="sub-link">Services</a>
+        <button class="sub-toggle" type="button" aria-expanded="false" aria-controls="sub-services" aria-label="Services 하위 메뉴"><svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <ul class="sub-menu" id="sub-services">
+          <li><a href="#svc-film"><span class="sm-title"><span class="ko">영상 제작</span><span class="en">Film &amp; Video Production</span></span><span class="sm-desc"><span class="ko">NAVIG Studio · 브랜드 필름, 행사, 교육 영상</span><span class="en">NAVIG Studio · Brand films, events, education</span></span></a></li>
+          <li><a href="certificate/"><span class="sm-title"><span class="ko">AI 교육·자격과정</span><span class="en">AI Education &amp; Certification</span></span><span class="sm-desc"><span class="ko">NAVIG Edutech · 민간자격과 교육 신청</span><span class="en">NAVIG Edutech · Apply for courses and certification</span></span></a></li>
+          <li><a href="music/"><span class="sm-title"><span class="ko">음원 라이선스</span><span class="en">Music Licensing</span></span><span class="sm-desc"><span class="ko">NAVIG Entertainment · 낭만뮤직 음원 사용 신청</span><span class="en">NAVIG Entertainment · Request music licenses</span></span></a></li>
+          <li><a href="#svc-ad"><span class="sm-title"><span class="ko">광고·마케팅</span><span class="en">Advertising &amp; Marketing</span></span><span class="sm-desc"><span class="ko">NAVIG AD · 채널 운영, 광고, 콘텐츠 마케팅</span><span class="en">NAVIG AD · Channels, ads, content marketing</span></span></a></li>
+          <li><a href="https://navig.app" target="_blank" rel="noopener"><span class="sm-title"><span class="ko">영상 협업 플랫폼</span><span class="en">Video Collaboration Platform</span> <i aria-hidden="true">↗</i></span><span class="sm-desc"><span class="ko">NAVIG Labs · navig.app</span><span class="en">NAVIG Labs · navig.app</span></span></a></li>
+        </ul>
+      </div>
       <a href="#navig">NAVIG</a>
       <a href="#newsroom">Newsroom</a>
       <a href="#contact">Contact</a>
+      <a class="nav-cta" href="https://pf.kakao.com/_XPUDG/chat" target="_blank" rel="noopener"><span class="ko">문의·신청</span><span class="en">Inquiry</span></a>
       <div class="lang-switch" role="group" aria-label="언어 선택">
         <button type="button" data-set-lang="ko" aria-pressed="true">KOR</button>
         <span aria-hidden="true">/</span>
@@ -300,10 +311,10 @@
         </h2>
       </div>
       <ul class="svc-list">
-        <li class="reveal"><span class="svc-no">01</span><h3 class="svc-name">Film &amp; Video<small><span class="ko">영상 제작</span><span class="en">Production</span></small></h3><p class="svc-desc"><span class="ko">브랜드·홍보 필름, 모집안내 영상, 행사 스케치, 시리즈 콘텐츠. 기획과 시나리오, 촬영, 편집, 납품까지.</span><span class="en">Brand films, admissions films, event films and series. Concept, script, shoot, edit, delivery.</span></p></li>
+        <li class="reveal" id="svc-film"><span class="svc-no">01</span><h3 class="svc-name">Film &amp; Video<small><span class="ko">영상 제작</span><span class="en">Production</span></small></h3><p class="svc-desc"><span class="ko">브랜드·홍보 필름, 모집안내 영상, 행사 스케치, 시리즈 콘텐츠. 기획과 시나리오, 촬영, 편집, 납품까지.</span><span class="en">Brand films, admissions films, event films and series. Concept, script, shoot, edit, delivery.</span></p></li>
         <li class="reveal"><span class="svc-no">02</span><h3 class="svc-name">Motion &amp; Design<small><span class="ko">모션그래픽·디자인</span><span class="en">Visual Design</span></small></h3><p class="svc-desc"><span class="ko">전시·사이니지 모션그래픽, 로고와 콘텐츠 아이덴티티, 키비주얼.</span><span class="en">Exhibition and signage motion graphics, logos, content identity and key visuals.</span></p></li>
         <li class="reveal"><span class="svc-no">03</span><h3 class="svc-name">Live Streaming<small><span class="ko">실시간 중계</span><span class="en">Broadcast</span></small></h3><p class="svc-desc"><span class="ko">시상식, 컨퍼런스, 포럼의 실시간 중계와 녹화본 편집.</span><span class="en">Live streaming for awards, conferences and forums, with post-event edits.</span></p></li>
-        <li class="reveal"><span class="svc-no">04</span><h3 class="svc-name">Digital Marketing<small>NAVIG AD</small></h3><p class="svc-desc"><span class="ko">브랜드 채널 운영, 광고 콘텐츠 기획과 제작, 웹사이트 운영 대행.</span><span class="en">Brand channel management, ad content, website operations.</span></p></li>
+        <li class="reveal" id="svc-ad"><span class="svc-no">04</span><h3 class="svc-name">Digital Marketing<small>NAVIG AD</small></h3><p class="svc-desc"><span class="ko">브랜드 채널 운영, 광고 콘텐츠 기획과 제작, 웹사이트 운영 대행.</span><span class="en">Brand channel management, ad content, website operations.</span></p></li>
         <li class="reveal"><span class="svc-no">05</span><h3 class="svc-name">AI Education<small>NAVIG Edutech</small></h3><p class="svc-desc"><span class="ko">AI 영상·비주얼 콘텐츠 제작 교육, 기관 맞춤 과정, 민간자격 AI영상콘텐츠제작전문가.</span><span class="en">AI video and visual content training, custom programs for institutions, private certification.</span></p></li>
       </ul>
     </div>
