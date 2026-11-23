@@ -1,0 +1,29 @@
+.m-hero { padding: clamp(140px, 14vw, 220px) 0 clamp(56px, 6vw, 96px); }
+.m-hero h1 { font-size: clamp(38px, 6vw, 104px); font-weight: 700; line-height: 1.08; letter-spacing: -0.045em; }
+.m-hero h1 .dim { color: var(--dim); }
+.m-hero .lead { max-width: 760px; margin-top: 28px; font-size: clamp(17px, 1.4vw, 21px); color: var(--gray-1); }
+.m-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+.m-btn { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 600; padding: 15px 26px; border-radius: 999px; border: 1.5px solid var(--ink); transition: background-color .25s, color .25s; }
+.m-btn.fill { background: var(--ink); color: var(--white); }
+.m-btn:hover { background: var(--ink); color: var(--white); }
+.m-sec { padding: clamp(64px, 7vw, 112px) 0; border-top: 1px solid var(--line); }
+.m-label { font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--gray-2); }
+.m-sec h2 { font-size: clamp(28px, 3.2vw, 48px); font-weight: 700; letter-spacing: -.04em; line-height: 1.15; margin: 10px 0 36px; }
+.m-box { margin-top: 28px; padding: 18px 22px; border-left: 3px solid var(--ink); background: var(--panel); font-size: 15px; line-height: 1.7; max-width: 900px; }
+.m-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: st; }
+.m-steps div { border-top: 1px solid var(--ink); padding-top: 16px; }
+.m-steps b { display: block; font-size: 13px; color: var(--gray-2); font-variant-numeric: tabular-nums; }
+.m-steps strong { display: block; font-size: 18px; letter-spacing: -.02em; margin: 4px 0 6px; }
+.m-steps p { font-size: 14px; color: var(--gray-1); }
+
+/* navig.si 소개 페이지 (초안, noindex). music.css 의 공통 규칙을 복사해 독립 운영 */
+.si-dot { color: var(--mint); }
+.si-list { list-style: none; border-top: 1px solid var(--line); max-width: 980px; }
+.si-list li { display: grid; grid-template-columns: 280px 1fr; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.si-list strong { font-size: 18px; letter-spacing: -.02em; }
+.si-list span { font-size: 16px; color: var(--gray-1); }
+.si-text { max-width: 760px; font-size: 17px; color: var(--gray-1); line-height: 1.7; }
+.si-sign { margin-top: 56px; font-size: clamp(20px, 2vw, 28px); font-weight: 700; letter-spacing: -.03em; }
+.si-sign span { display: block; margin-top: 6px; font-size: 12px; font-weight: 600; letter-spacing: .2em; color: var(--mint); }
+@media (max-width: 1100px) { .m-steps { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 760px) { .m-steps, .si-list li { grid-template-columns: 1fr; } .si-list li { gap: 4px; } }
