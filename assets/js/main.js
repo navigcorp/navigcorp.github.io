@@ -27,7 +27,7 @@
       "@id": S.url + "/#organization",
       "name": S.nameKo + " (" + S.nameEn + ")",
       "alternateName": [S.nameEn, "NAVIG Corp.", S.nameKo],
-      "slogan": "Content, Engineered.",
+      "slogan": "방향이 곧 움직임.",
       "url": S.url + "/",
       "logo": S.url + "/assets/img/logo-navig-black.png",
       "email": S.email,
