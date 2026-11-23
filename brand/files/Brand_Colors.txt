@@ -1,0 +1,13 @@
+NAVIG Brand Colors (2026 Brand Center)
+
+Primary
+- NAVIG Black   HEX #000000   RGB 0, 0, 0
+- NAVIG White   HEX #FFFFFF   RGB 255, 255, 255
+
+Accent (보조 강조색, 면적 5% 이내)
+- NAVIG Green   HEX #2E9E6E   RGB 46, 158, 110
+
+Neutral (웹 UI)
+- Ink           HEX #0A0A0A   RGB 10, 10, 10
+- Gray          HEX #6B6B6B   RGB 107, 107, 107
+- Panel         HEX #F3F3F1   RGB 243, 243, 241
