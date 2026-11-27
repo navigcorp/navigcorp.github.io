@@ -322,8 +322,12 @@ html[data-theme="dark"] .tt-moon { color: var(--white); }
 .marquee-track .h-s img { height: 20px; }
 .marquee-track .h-m img { height: 30px; }
 .marquee-track .h-l img { height: 38px; }
-html[data-theme="dark"] .marquee + .marquee { margin-top: 14px; }
-html[data-theme="dark"] .marquee-track li { height: 64px; min-width: 176px; margin: 0 8px; padding: 0 22px; background: #f4f4f2; border-radius: 12px; }
+/* 다크 모드: 배경 없이 필터로 톤 맞춤. 어두운 로고는 흑백 반전(세부 유지), 밝은 로고(.lt)는 흑백 밝게. 마우스 올리면 브랜드 색 */
+html[data-theme="dark"] .marquee-track img { filter: grayscale(1) invert(1) brightness(1.12); opacity: .86; transition: filter .3s, opacity .3s; }
+html[data-theme="dark"] .marquee-track img.lt { filter: grayscale(1) brightness(1.55); }
+html[data-theme="dark"] .marquee-track img.md { filter: grayscale(1) invert(1) brightness(1.5) contrast(1.1); }
+html[data-theme="dark"] .marquee-track img:hover { filter: invert(1) hue-rotate(180deg) brightness(1.12); opacity: 1; }
+html[data-theme="dark"] .marquee-track img.lt:hover { filter: none; }
 @keyframes navig-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .marquee { -webkit-mask-image: none; mask-image: none; }
@@ -347,7 +351,6 @@ html[data-theme="dark"] .marquee-track li { height: 64px; min-width: 176px; marg
   .hs-year li { grid-template-columns: 36px 1fr; gap: 10px; }
   .marquee-track li { height: 44px; padding: 0 22px; }
   .marquee-track img { zoom: .8; }
-  html[data-theme="dark"] .marquee-track li { height: 52px; min-width: 140px; padding: 0 16px; margin: 0 5px; }
 }
 
 /* 모바일 메뉴 오버레이: 스크롤 후에도 전체 화면으로 열리고 닫히게 (backdrop-filter가 fixed 기준을 헤더로 가두는 문제 해결) */
