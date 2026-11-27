@@ -317,11 +317,13 @@ html[data-theme="dark"] .tt-moon { color: var(--white); }
 .marquee + .marquee { margin-top: 8px; }
 .marquee.m-b .marquee-track { animation-direction: reverse; animation-duration: 120s; }
 .marquee-track li { flex: none; display: flex; align-items: center; justify-content: center; height: 56px; padding: 0 clamp(28px, 3.4vw, 52px); }
-.marquee-track img { width: auto; max-width: 168px; object-fit: contain; filter: brightness(0); opacity: .78; transition: opacity .25s; }
+.marquee-track img { display: block; object-fit: contain; max-width: none; }
+/* 고객사 로고: 공식 컬러 그대로(261128). 다크 모드에서는 흰 칩 위에 올려 원색 유지 */
 .marquee-track .h-s img { height: 20px; }
 .marquee-track .h-m img { height: 30px; }
 .marquee-track .h-l img { height: 38px; }
-html[data-theme="dark"] .marquee-track img { filter: brightness(0) invert(1); opacity: .82; }
+html[data-theme="dark"] .marquee + .marquee { margin-top: 14px; }
+html[data-theme="dark"] .marquee-track li { height: 64px; min-width: 176px; margin: 0 8px; padding: 0 22px; background: #f4f4f2; border-radius: 12px; }
 @keyframes navig-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .marquee { -webkit-mask-image: none; mask-image: none; }
@@ -344,9 +346,8 @@ html[data-theme="dark"] .marquee-track img { filter: brightness(0) invert(1); op
   .hs-year h3, .hs-year ol { grid-column: 1 / -1; }
   .hs-year li { grid-template-columns: 36px 1fr; gap: 10px; }
   .marquee-track li { height: 44px; padding: 0 22px; }
-  .marquee-track .h-s img { height: 16px; }
-  .marquee-track .h-m img { height: 24px; }
-  .marquee-track .h-l img { height: 30px; }
+  .marquee-track img { zoom: .8; }
+  html[data-theme="dark"] .marquee-track li { height: 52px; min-width: 140px; padding: 0 16px; margin: 0 5px; }
 }
 
 /* 모바일 메뉴 오버레이: 스크롤 후에도 전체 화면으로 열리고 닫히게 (backdrop-filter가 fixed 기준을 헤더로 가두는 문제 해결) */
@@ -420,3 +421,12 @@ html[data-theme="dark"] .marquee-track li.wm-emb img { filter: brightness(0) inv
   .sm-desc { font-size: 13px; }
   .nav-cta { height: 44px; padding: 0 22px; font-size: 15px; margin-top: 6px; }
 }
+
+/* 공식 SNS (261128) */
+.site-footer .footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
+.sns { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.sns a { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); color: var(--gray-2); transition: color .2s, border-color .2s, background .2s; }
+.sns a:hover, .sns a:focus-visible { color: var(--ink); border-color: currentColor; }
+.sns svg { width: 15px; height: 15px; fill: currentColor; }
+.contact-grid .sns-text { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 15px; }
+@media (max-width: 860px) { .site-footer .footer-right { align-items: flex-start; } }
