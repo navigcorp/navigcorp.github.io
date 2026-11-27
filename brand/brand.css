@@ -1,5 +1,5 @@
 /* 브랜드 리소스 페이지 전용. 기본 톤은 ../assets/css/style.css 를 따른다.
-   그린은 대표 확정값 #2E9E6E(11/23)를 이 페이지에서만 씀. 공통 --mint(#39E99E)는 건드리지 않음. */
+   그린은 대표 확정값 #2E9E6E(11/23)를 이 페이지에서만 씀. 공통 --mint(이전 값)는 건드리지 않음. */
 .brand-page { --bg-green: #2E9E6E; }
 .brand-page section { padding: 0; }
 .brand-page section + section { border-top: 0; }
@@ -64,11 +64,40 @@
 .id-stage.sym { aspect-ratio: 16 / 9; background: var(--panel); color: var(--ink); }
 .wm-motion { width: min(70%, 760px); fill: currentColor; overflow: visible; }
 .sym-motion { width: 34%; fill: currentColor; overflow: visible; }
-.wm-motion polygon, .sym-motion polygon { opacity: 0; transform: translate(-36px, 14px); }
-.is-play polygon { animation: enter .9s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(var(--i) * 90ms + 120ms); }
-@keyframes enter { to { opacity: 1; transform: none; } }
-.replay { position: absolute; right: 16px; bottom: 14px; font-size: 12px; font-weight: 600; letter-spacing: .04em; padding: 7px 12px; border-radius: 999px; border: 1px solid currentColor; opacity: .55; transition: opacity .2s; }
-.replay:hover { opacity: 1; }
+/* 로고 루프 모션(11/28): N이 가운데 등장 → 한 바퀴 회전 → 왼쪽으로 이동하며 N 뒤에서 AVIG가 펼쳐짐 → 유지 → 사라짐, 7.5초마다 반복.
+   transform·opacity만 써서 가볍고, 화면 밖이면 brand.js가 멈춤(.is-on 해제). */
+.wm-motion g, .sym-motion g { transform-box: fill-box; transform-origin: 50% 50%; }
+.m-slide, .m-spin, .m-rest polygon { animation-duration: 7.5s; animation-iteration-count: infinite; animation-fill-mode: both; animation-play-state: paused; }
+.m-slide { animation-name: mSlide; }
+.m-spin { animation-name: mSpin; }
+.sym-motion .m-spin { animation-name: mSpinSym; }
+.m-rest polygon { animation-name: mRest; }
+.is-on .m-slide, .is-on .m-spin, .is-on .m-rest polygon { animation-play-state: running; }
+@keyframes mSpin {
+  0% { opacity: 0; transform: scale(.6) rotate(0deg); animation-timing-function: cubic-bezier(.2,.8,.2,1); }
+  7% { opacity: 1; transform: scale(1) rotate(0deg); animation-timing-function: cubic-bezier(.65,0,.35,1); }
+  25% { opacity: 1; transform: scale(1) rotate(360deg); }
+  88% { opacity: 1; transform: scale(1) rotate(360deg); }
+  94%, 100% { opacity: 0; transform: scale(1) rotate(360deg); }
+}
+@keyframes mSpinSym {
+  0% { opacity: 0; transform: scale(.6) rotate(0deg); animation-timing-function: cubic-bezier(.2,.8,.2,1); }
+  7% { opacity: 1; transform: scale(1) rotate(0deg); animation-timing-function: cubic-bezier(.65,0,.35,1); }
+  25% { opacity: 1; transform: scale(1) rotate(360deg); }
+  88% { opacity: 1; transform: scale(1) rotate(360deg); }
+  94%, 100% { opacity: 0; transform: scale(1) rotate(360deg); }
+}
+@keyframes mSlide {
+  0%, 27% { transform: translateX(116.93px); animation-timing-function: cubic-bezier(.7,0,.2,1); }
+  42%, 100% { transform: translateX(0); }
+}
+@keyframes mRest {
+  0%, 28% { opacity: 0; transform: translateX(var(--dx)); animation-timing-function: cubic-bezier(.7,0,.2,1); }
+  34% { opacity: 1; }
+  42% { transform: translateX(0); }
+  88% { opacity: 1; transform: translateX(0); }
+  94%, 100% { opacity: 0; transform: translateX(0); }
+}
 .id-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 24px 26px 26px; flex: 1; flex-wrap: wrap; }
 .id-meta > div:first-child { max-width: 560px; }
 .id-meta h3 { font-size: 20px; letter-spacing: -.02em; display: flex; align-items: baseline; gap: 10px; }
@@ -189,6 +218,6 @@ html[data-theme="dark"] .cl em { background: rgba(255,255,255,.9); color: #000; 
   .cl-ratio span { font-size: 11px; padding: 0 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wm-motion polygon, .sym-motion polygon { opacity: 1; transform: none; animation: none !important; }
+  .m-slide, .m-spin, .m-rest polygon { opacity: 1; transform: none; animation: none !important; }
   .b-trail { display: none; }
 }
