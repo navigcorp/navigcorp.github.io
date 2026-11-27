@@ -64,69 +64,46 @@
 .id-stage.sym { aspect-ratio: 16 / 9; background: var(--panel); color: var(--ink); }
 .wm-motion { width: min(70%, 760px); fill: currentColor; overflow: visible; }
 .sym-motion { width: 34%; fill: currentColor; overflow: visible; }
-/* 로고 루프 모션 v3(11/28) "내비게이터": 방향이 곧 움직임.
-   ① 워드마크의 A가 90° 누운 `>`(나빅의 방향 기호)가 되어 왼쪽에서 궤적 선을 끌고 들어온다(Explorer: 좌표를 찾고 궤적을 그림).
-   ② 지나가는 자리마다 N 획이 사선(0.375:1)을 타고 솟고, `>`가 몸을 틀어 A로 맞물리는 순간 V·I·G가 물결처럼 이어 선다(Direction: 갈 곳을 먼저 정함).
-   ③ 궤적 선은 A 안으로 감겨 들어가며 사라진다.
-   ④ 잠시 머문 뒤 모든 획이 왼쪽부터 살짝 눌렸다가 사선 위로 빠져나간다(Motion: 끊어지고 다시 이어지는 전진).
-   ⑤ 마지막 G가 빠지는 동안 다음 `>`가 왼쪽에서 들어와, 한 방향으로 끝없이 흐른다.
-   심볼은 사선 궤적이 먼저 그어지고 두 획이 그 위를 타고 올라 N을 만든 뒤 같은 방향으로 빠진다.
-   transform·stroke-dashoffset만 쓰고(가벼움), 화면 밖이면 brand.js가 멈춘다(.is-on 해제). 최종 정지 상태는 원본 좌표 그대로. */
-.wm-motion { --t: 5.4s; }
-.sym-motion { --t: 4.2s; }
-.wm-motion polygon, .sym-motion polygon { transform-box: fill-box; transform-origin: 50% 50%; }
-.m-l {
-  --dx: 52.5px; --dy: 140px; /* 사선 방향 이동량: dy 140, dx = 140 × 0.375 */
-  --a: 20.56deg;            /* 로고 사선 각도. 이 축으로 늘이고 눌러 속도감을 준다 */
-  transform: translate(calc(var(--dx) * -1), var(--dy));
-  animation: mRise var(--t) infinite both paused;
-  animation-delay: var(--d, 0ms);
+/* 로고 루프 모션 v4(11/28) "3D 내비게이터": 선 없이, 원근(perspective) 속에서 획이 입체로 돈다.
+   - 획 하나하나가 로고 사선(0.375:1)을 축으로 한 얇은 날처럼, 깊은 곳(아래-왼쪽)에서 옆면으로 누운 채 올라와 정면으로 돌아서며 착 붙는다(살짝 넘쳤다 돌아옴).
+   - A는 90° 누운 `>`(나빅의 방향 기호)로 왼쪽 깊은 곳에서 기울어진 채 날아들어, 정면으로 서며 몸을 틀어 A로 맞물린다. 그 순간 V·I·G가 물결처럼 돌아선다.
+   - 머문 뒤 획들이 왼쪽부터 살짝 되감았다가(예비동작) 반대로 돌며 사선 위·앞쪽으로 빠지고, 마지막 G가 빠지는 동안 다음 `>`가 들어와 끝없이 이어진다.
+   - 돌아갈 때 옅어지는 불투명도로 면이 빛을 잃는 듯한 음영을 준다. 실제 3D 모델 없이 transform·opacity만 쓴다(GPU 합성, 가벼움). 화면 밖이면 정지. 머무는 동안은 원본 좌표 그대로. */
+.id-stage { perspective: 1100px; }
+.wm-motion { --t: 5.4s; aspect-ratio: 350.79 / 85.04; }
+.sym-motion { --t: 4.2s; aspect-ratio: 116.93 / 85.04; }
+.m3d { position: relative; transform-style: preserve-3d; }
+.m3d > svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: currentColor; overflow: visible; transform-origin: var(--ox) 50%; backface-visibility: visible; }
+.m-l { opacity: 0; transform: translate3d(-4%, 48%, -220px) rotate3d(.375, -1, 0, 86deg); animation: mBlade var(--t) infinite both paused; animation-delay: var(--d, 0ms); }
+.m-nav { opacity: 0; translate: -78% 0 -180px; rotate: y 58deg; transform: translate3d(0%, 0%, 0px) rotate3d(.375, -1, 0, 0deg) rotate(90deg);
+  animation: mNavGlide var(--t) infinite both paused, mNavBank var(--t) infinite both paused, mNavTurn var(--t) infinite both paused; }
+.is-on .m-l, .is-on .m-nav { animation-play-state: running; }
+@keyframes mBlade {
+  0%    { opacity: 0; transform: translate3d(-4%, 48%, -220px) rotate3d(.375, -1, 0, 86deg); animation-timing-function: cubic-bezier(.12, .9, .25, 1); }
+  4%    { opacity: 1; }
+  10%   { transform: translate3d(.2%, -1.2%, 10px) rotate3d(.375, -1, 0, -9deg); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
+  14.5% { transform: translate3d(0%, 0%, 0px) rotate3d(.375, -1, 0, 3deg); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
+  18%, 76.5% { opacity: 1; transform: translate3d(0%, 0%, 0px) rotate3d(.375, -1, 0, 0deg); animation-timing-function: cubic-bezier(.33, 0, .67, 1); }
+  81.5% { transform: translate3d(-.25%, 2.5%, -10px) rotate3d(.375, -1, 0, 8deg); animation-timing-function: cubic-bezier(.55, 0, .75, .35); }
+  89%   { opacity: 1; }
+  92%, 100% { opacity: 0; transform: translate3d(5%, -60%, 200px) rotate3d(.375, -1, 0, -88deg); }
 }
-.m-nav {
-  --dx: 52.5px; --dy: 140px; --a: 20.56deg;
-  translate: -270px 0; rotate: 90deg;
-  animation: mNavX var(--t) infinite both paused, mNavTurn var(--t) infinite both paused, mNavSmear var(--t) infinite both paused, mNavOut var(--t) infinite both paused;
+@keyframes mNavGlide { /* 왼쪽 깊은 곳에서 감속하며 A 자리로 */
+  0%   { opacity: 0; translate: -78% 0 -180px; animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
+  4%   { opacity: 1; }
+  16%, 100% { opacity: 1; translate: 0 0 0; }
 }
-.m-trail { fill: none; stroke: currentColor; stroke-width: .55; stroke-dasharray: 1 1; }
-.wm-motion .m-trail { translate: -270px 0; animation: mNavX var(--t) infinite both paused, mTrailWm var(--t) infinite both paused; }
-.sym-motion .m-trail { stroke-dashoffset: 1; animation: mGuide var(--t) infinite both paused; }
-.is-on .m-l, .is-on .m-nav, .is-on .m-trail { animation-play-state: running; }
-@keyframes mRise {
-  0%    { transform: translate(calc(var(--dx) * -1), var(--dy)) rotate(var(--a)) scaleY(1.7) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.12, .9, .25, 1); }
-  9.5%  { transform: translate(1.1px, -2.9px) rotate(var(--a)) scaleY(.93) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  14%   { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1.02) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  18%   { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); }
-  76.5% { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.33, 0, .67, 1); }
-  81.5% { transform: translate(-.9px, 2.4px) rotate(var(--a)) scaleY(.92) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.75, 0, .9, .3); }
-  92%, 100% { transform: translate(var(--dx), calc(var(--dy) * -1)) rotate(var(--a)) scaleY(1.8) rotate(calc(var(--a) * -1)); }
+@keyframes mNavBank { /* 날아들 때 기울었던 몸을 정면으로 */
+  0%   { rotate: y 58deg; animation-timing-function: cubic-bezier(.2, .9, .3, 1); }
+  14%  { rotate: y -6deg; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
+  19%, 100% { rotate: y 0deg; }
 }
-@keyframes mNavX { /* `>`가 왼쪽에서 감속하며 들어와 A 자리에 선다 */
-  0%   { translate: -270px 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
-  17%, 100% { translate: 0px 0; }
-}
-@keyframes mNavTurn { /* 누운 `>`가 몸을 틀어 A로 맞물림(살짝 넘쳤다 돌아옴) */
-  0%   { rotate: 90deg; }
-  8%   { rotate: 90deg; animation-timing-function: cubic-bezier(.3, 1.5, .45, 1); }
-  15.5%, 100% { rotate: 0deg; }
-}
-@keyframes mNavSmear { /* 누운 상태에서 세로축 = 화면 가로축. 빠를 때 진행 방향으로 늘어남 */
-  0%   { scale: 1 1.55; animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
-  10%, 100% { scale: 1 1; }
-}
-@keyframes mNavOut { /* 퇴장은 다른 획과 같은 사선 물결(N 다음, V 앞) */
-  0%, 83% { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.33, 0, .67, 1); }
-  88%  { transform: translate(-.9px, 2.4px) rotate(var(--a)) scaleY(.92) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.75, 0, .9, .3); }
-  98.5%, 100% { transform: translate(var(--dx), calc(var(--dy) * -1)) rotate(var(--a)) scaleY(1.8) rotate(calc(var(--a) * -1)); }
-}
-@keyframes mTrailWm {
-  0%, 17% { stroke-dashoffset: 0; animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
-  28%, 100% { stroke-dashoffset: -1; }
-}
-@keyframes mGuide {
-  0%   { stroke-dashoffset: 1; animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
-  14%  { stroke-dashoffset: 0; }
-  24%  { stroke-dashoffset: 0; animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
-  40%, 100% { stroke-dashoffset: -1; }
+@keyframes mNavTurn { /* `>`가 A로 맞물리고, 퇴장은 다른 획과 같은 날 회전(N 다음, V 앞) */
+  0%, 8% { transform: translate3d(0%, 0%, 0px) rotate3d(.375, -1, 0, 0deg) rotate(90deg); animation-timing-function: cubic-bezier(.3, 1.5, .45, 1); }
+  15.5%, 83% { opacity: 1; transform: translate3d(0%, 0%, 0px) rotate3d(.375, -1, 0, 0deg) rotate(0deg); animation-timing-function: cubic-bezier(.33, 0, .67, 1); }
+  88%  { transform: translate3d(-.25%, 2.5%, -10px) rotate3d(.375, -1, 0, 8deg) rotate(0deg); animation-timing-function: cubic-bezier(.55, 0, .75, .35); }
+  95.5% { opacity: 1; }
+  98.5%, 100% { opacity: 0; transform: translate3d(5%, -60%, 200px) rotate3d(.375, -1, 0, -88deg) rotate(0deg); }
 }
 .id-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 24px 26px 26px; flex: 1; flex-wrap: wrap; }
 .id-meta > div:first-child { max-width: 560px; }
@@ -248,8 +225,7 @@ html[data-theme="dark"] .cl em { background: rgba(255,255,255,.9); color: #000; 
   .cl-ratio span { font-size: 11px; padding: 0 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .m-l, .m-nav { transform: none; translate: none; rotate: none; scale: none; animation: none !important; }
-  .m-trail { display: none; }
+  .m-l, .m-nav { opacity: 1; transform: none; translate: none; rotate: none; scale: none; animation: none !important; }
   .b-trail { display: none; }
 }
 
