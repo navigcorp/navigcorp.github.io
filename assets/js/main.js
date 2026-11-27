@@ -19,27 +19,7 @@
     el.setAttribute("href", v);
   });
 
-  // 2) 구조화 데이터
-  if (S.url) {
-    var ld = {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "@id": S.url + "/#organization",
-      "name": S.nameKo + " (" + S.nameEn + ")",
-      "alternateName": [S.nameEn, "NAVIG Corp.", S.nameKo],
-      "slogan": "방향이 곧 움직임.",
-      "url": S.url + "/",
-      "logo": S.url + "/assets/img/logo-navig-black.png",
-      "email": S.email,
-      "telephone": S.telIntl,
-      "address": { "@type": "PostalAddress", "streetAddress": S.address.street, "addressLocality": S.address.locality, "addressRegion": S.address.region, "addressCountry": S.address.country },
-      "sameAs": [S.service, "https://blog.naver.com/navigcorp"]
-    };
-    var tag = document.createElement("script");
-    tag.type = "application/ld+json";
-    tag.textContent = JSON.stringify(ld);
-    document.head.appendChild(tag);
-  }
+  // 2) 구조화 데이터는 각 페이지 head에 정적으로 들어 있음(JS 미실행 크롤러 대응)
 
   // 3) 언어 전환 (KOR / ENG)
   function setLang(lang) {
