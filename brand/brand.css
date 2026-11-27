@@ -64,46 +64,19 @@
 .id-stage.sym { aspect-ratio: 16 / 9; background: var(--panel); color: var(--ink); }
 .wm-motion { width: min(70%, 760px); fill: currentColor; overflow: visible; }
 .sym-motion { width: 34%; fill: currentColor; overflow: visible; }
-/* 로고 루프 모션 v4(11/28) "3D 내비게이터": 선 없이, 원근(perspective) 속에서 획이 입체로 돈다.
-   - 획 하나하나가 로고 사선(0.375:1)을 축으로 한 얇은 날처럼, 깊은 곳(아래-왼쪽)에서 옆면으로 누운 채 올라와 정면으로 돌아서며 착 붙는다(살짝 넘쳤다 돌아옴).
-   - A는 90° 누운 `>`(나빅의 방향 기호)로 왼쪽 깊은 곳에서 기울어진 채 날아들어, 정면으로 서며 몸을 틀어 A로 맞물린다. 그 순간 V·I·G가 물결처럼 돌아선다.
-   - 머문 뒤 획들이 왼쪽부터 살짝 되감았다가(예비동작) 반대로 돌며 사선 위·앞쪽으로 빠지고, 마지막 G가 빠지는 동안 다음 `>`가 들어와 끝없이 이어진다.
-   - 돌아갈 때 옅어지는 불투명도로 면이 빛을 잃는 듯한 음영을 준다. 실제 3D 모델 없이 transform·opacity만 쓴다(GPU 합성, 가벼움). 화면 밖이면 정지. 머무는 동안은 원본 좌표 그대로. */
-.id-stage { perspective: 1100px; }
-.wm-motion { --t: 5.4s; aspect-ratio: 350.79 / 85.04; }
-.sym-motion { --t: 4.2s; aspect-ratio: 116.93 / 85.04; }
-.m3d { position: relative; transform-style: preserve-3d; }
-.m3d > svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: currentColor; overflow: visible; transform-origin: var(--ox) 50%; backface-visibility: visible; }
-.m-l { opacity: 0; transform: translate3d(-4%, 48%, -220px) rotate3d(.375, -1, 0, 86deg); animation: mBlade var(--t) infinite both paused; animation-delay: var(--d, 0ms); }
-.m-nav { opacity: 0; translate: -78% 0 -180px; rotate: y 58deg; transform: translate3d(0%, 0%, 0px) rotate3d(.375, -1, 0, 0deg) rotate(90deg);
-  animation: mNavGlide var(--t) infinite both paused, mNavBank var(--t) infinite both paused, mNavTurn var(--t) infinite both paused; }
-.is-on .m-l, .is-on .m-nav { animation-play-state: running; }
-@keyframes mBlade {
-  0%    { opacity: 0; transform: translate3d(-4%, 48%, -220px) rotate3d(.375, -1, 0, 86deg); animation-timing-function: cubic-bezier(.12, .9, .25, 1); }
-  4%    { opacity: 1; }
-  10%   { transform: translate3d(.2%, -1.2%, 10px) rotate3d(.375, -1, 0, -9deg); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  14.5% { transform: translate3d(0%, 0%, 0px) rotate3d(.375, -1, 0, 3deg); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  18%, 76.5% { opacity: 1; transform: translate3d(0%, 0%, 0px) rotate3d(.375, -1, 0, 0deg); animation-timing-function: cubic-bezier(.33, 0, .67, 1); }
-  81.5% { transform: translate3d(-.25%, 2.5%, -10px) rotate3d(.375, -1, 0, 8deg); animation-timing-function: cubic-bezier(.55, 0, .75, .35); }
-  89%   { opacity: 1; }
-  92%, 100% { opacity: 0; transform: translate3d(5%, -60%, 200px) rotate3d(.375, -1, 0, -88deg); }
-}
-@keyframes mNavGlide { /* 왼쪽 깊은 곳에서 감속하며 A 자리로 */
-  0%   { opacity: 0; translate: -78% 0 -180px; animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
-  4%   { opacity: 1; }
-  16%, 100% { opacity: 1; translate: 0 0 0; }
-}
-@keyframes mNavBank { /* 날아들 때 기울었던 몸을 정면으로 */
-  0%   { rotate: y 58deg; animation-timing-function: cubic-bezier(.2, .9, .3, 1); }
-  14%  { rotate: y -6deg; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  19%, 100% { rotate: y 0deg; }
-}
-@keyframes mNavTurn { /* `>`가 A로 맞물리고, 퇴장은 다른 획과 같은 날 회전(N 다음, V 앞) */
-  0%, 8% { transform: translate3d(0%, 0%, 0px) rotate3d(.375, -1, 0, 0deg) rotate(90deg); animation-timing-function: cubic-bezier(.3, 1.5, .45, 1); }
-  15.5%, 83% { opacity: 1; transform: translate3d(0%, 0%, 0px) rotate3d(.375, -1, 0, 0deg) rotate(0deg); animation-timing-function: cubic-bezier(.33, 0, .67, 1); }
-  88%  { transform: translate3d(-.25%, 2.5%, -10px) rotate3d(.375, -1, 0, 8deg) rotate(0deg); animation-timing-function: cubic-bezier(.55, 0, .75, .35); }
-  95.5% { opacity: 1; }
-  98.5%, 100% { opacity: 0; transform: translate3d(5%, -60%, 200px) rotate3d(.375, -1, 0, -88deg) rotate(0deg); }
+/* 로고 루프 모션 v5(11/28) "끝없는 사선": 로고 획이 자기 사선(0.375:1) 레일을 따라 위·앞으로 한 칸씩 전진한다.
+   - 각 획 바로 아래 사선 방향에 같은 획이 한 벌 더 있어, 한 칸 전진하면 다음 로고가 정확히 원래 자리에 선다. 되돌아가는 순간이 보이지 않아 처음과 끝이 없다.
+   - 회전·튕김·투명도·빛줄기 없이 위치 이동만. 왼쪽 획부터 아주 짧은 시차로 출발해 방향감만 남긴다. 멈춰 있는 동안은 원본 좌표 그대로.
+   - 카드 밖은 잘린다(id-card overflow). 화면 밖이면 정지(.is-on), 동작 줄이기 설정이면 정지. */
+.wm-motion { --t: 4.6s; --mx: 15.5%; aspect-ratio: 350.79 / 85.04; }
+.sym-motion { --t: 4.6s; --mx: 46.5%; aspect-ratio: 116.93 / 85.04; }
+.m3d { position: relative; }
+.m3d > svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: currentColor; overflow: visible; }
+.m-l { will-change: transform; animation: mRail var(--t) infinite both paused; animation-delay: calc(var(--i, 0) * 35ms); }
+.is-on .m-l { animation-play-state: running; }
+@keyframes mRail {
+  0%, 66% { transform: translate(0, 0); animation-timing-function: cubic-bezier(.7, 0, .16, 1); }
+  100% { transform: translate(var(--mx), -170.5%); }
 }
 .id-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 24px 26px 26px; flex: 1; flex-wrap: wrap; }
 .id-meta > div:first-child { max-width: 560px; }
@@ -225,7 +198,7 @@ html[data-theme="dark"] .cl em { background: rgba(255,255,255,.9); color: #000; 
   .cl-ratio span { font-size: 11px; padding: 0 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .m-l, .m-nav { opacity: 1; transform: none; translate: none; rotate: none; scale: none; animation: none !important; }
+  .m-l { transform: none; animation: none !important; }
   .b-trail { display: none; }
 }
 
