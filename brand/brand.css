@@ -64,39 +64,40 @@
 .id-stage.sym { aspect-ratio: 16 / 9; background: var(--panel); color: var(--ink); }
 .wm-motion { width: min(70%, 760px); fill: currentColor; overflow: visible; }
 .sym-motion { width: 34%; fill: currentColor; overflow: visible; }
-/* 로고 루프 모션(11/28): N이 가운데 등장 → 한 바퀴 회전 → 왼쪽으로 이동하며 N 뒤에서 AVIG가 펼쳐짐 → 유지 → 사라짐, 7.5초마다 반복.
-   transform·opacity만 써서 가볍고, 화면 밖이면 brand.js가 멈춤(.is-on 해제). */
-.wm-motion g, .sym-motion g { transform-box: fill-box; transform-origin: 50% 50%; }
-.m-slide, .m-spin, .m-rest polygon { animation-duration: 7.5s; animation-iteration-count: infinite; animation-fill-mode: both; animation-play-state: paused; }
-.m-slide { animation-name: mSlide; }
-.m-spin { animation-name: mSpin; }
-.sym-motion .m-spin { animation-name: mSpinSym; }
-.m-rest polygon { animation-name: mRest; }
-.is-on .m-slide, .is-on .m-spin, .is-on .m-rest polygon { animation-play-state: running; }
-@keyframes mSpin {
-  0% { opacity: 0; transform: scale(.6) rotate(0deg); animation-timing-function: cubic-bezier(.2,.8,.2,1); }
-  7% { opacity: 1; transform: scale(1) rotate(0deg); animation-timing-function: cubic-bezier(.65,0,.35,1); }
-  25% { opacity: 1; transform: scale(1) rotate(360deg); }
-  88% { opacity: 1; transform: scale(1) rotate(360deg); }
-  94%, 100% { opacity: 0; transform: scale(1) rotate(360deg); }
+/* 로고 루프 모션 v2(11/28): "멈추지 않는 한 방향".
+   획마다 로고의 사선(약 69°)을 따라 아래 슬롯에서 솟아올라 자리 잡고, 잠깐 머문 뒤 같은 방향으로 위로 빠져나간다.
+   마지막 획이 빠지는 순간 첫 획이 다시 올라와 빈 화면 없이 끝없이 이어진다.
+   쫀득함: expo 가속·감속 + 빠를 때 사선 방향으로 늘어나는 스미어 + 착지 때 눌렸다 튕김 + 퇴장 직전 눌림(예비동작) + 획별 시차.
+   transform만 쓰고(가벼움), 화면 밖이면 brand.js가 멈춘다(.is-on 해제). */
+.wm-motion polygon, .sym-motion polygon {
+  --dx: 52.5px; --dy: 140px; /* 사선 방향 이동량: dy 140(늘어난 상태도 슬롯 밖에 숨게), dx = 140 × 0.375 */
+  --a: 20.56deg;              /* 로고 사선 각도(세로 기준). 이 축으로 늘이고 눌러 속도감(스미어)을 준다 */
+  transform-box: fill-box; transform-origin: 50% 50%;
+  transform: translate(calc(var(--dx) * -1), var(--dy));
+  animation: mFlow 4.6s infinite both paused;
+  animation-delay: calc(var(--i) * 70ms);
 }
-@keyframes mSpinSym {
-  0% { opacity: 0; transform: scale(.6) rotate(0deg); animation-timing-function: cubic-bezier(.2,.8,.2,1); }
-  7% { opacity: 1; transform: scale(1) rotate(0deg); animation-timing-function: cubic-bezier(.65,0,.35,1); }
-  25% { opacity: 1; transform: scale(1) rotate(360deg); }
-  88% { opacity: 1; transform: scale(1) rotate(360deg); }
-  94%, 100% { opacity: 0; transform: scale(1) rotate(360deg); }
+.sym-motion polygon { animation-name: mFlowSym; animation-delay: calc(var(--i) * 160ms); }
+.is-on polygon { animation-play-state: running; }
+@keyframes mFlow {
+  0%   { transform: translate(calc(var(--dx) * -1), var(--dy)) rotate(var(--a)) scaleY(1.7) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.12, .9, .25, 1); }
+  13%  { transform: translate(1.1px, -2.9px) rotate(var(--a)) scaleY(.93) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
+  21%  { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1.02) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
+  26%  { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); }
+  68%  { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.33, 0, .67, 1); }
+  75%  { transform: translate(-.9px, 2.4px) rotate(var(--a)) scaleY(.92) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.75, 0, .9, .3); }
+  89%  { transform: translate(var(--dx), calc(var(--dy) * -1)) rotate(var(--a)) scaleY(1.8) rotate(calc(var(--a) * -1)); }
+  100% { transform: translate(var(--dx), calc(var(--dy) * -1)) rotate(var(--a)) scaleY(1.8) rotate(calc(var(--a) * -1)); }
 }
-@keyframes mSlide {
-  0%, 27% { transform: translateX(116.93px); animation-timing-function: cubic-bezier(.7,0,.2,1); }
-  42%, 100% { transform: translateX(0); }
-}
-@keyframes mRest {
-  0%, 28% { opacity: 0; transform: translateX(var(--dx)); animation-timing-function: cubic-bezier(.7,0,.2,1); }
-  34% { opacity: 1; }
-  42% { transform: translateX(0); }
-  88% { opacity: 1; transform: translateX(0); }
-  94%, 100% { opacity: 0; transform: translateX(0); }
+@keyframes mFlowSym {
+  0%   { transform: translate(calc(var(--dx) * -1), var(--dy)) rotate(var(--a)) scaleY(1.7) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.12, .9, .25, 1); }
+  13%  { transform: translate(1.1px, -2.9px) rotate(var(--a)) scaleY(.93) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
+  21%  { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1.02) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
+  26%  { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); }
+  68%  { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.33, 0, .67, 1); }
+  75%  { transform: translate(-.9px, 2.4px) rotate(var(--a)) scaleY(.92) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.75, 0, .9, .3); }
+  93%  { transform: translate(var(--dx), calc(var(--dy) * -1)) rotate(var(--a)) scaleY(1.8) rotate(calc(var(--a) * -1)); }
+  100% { transform: translate(var(--dx), calc(var(--dy) * -1)) rotate(var(--a)) scaleY(1.8) rotate(calc(var(--a) * -1)); }
 }
 .id-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 24px 26px 26px; flex: 1; flex-wrap: wrap; }
 .id-meta > div:first-child { max-width: 560px; }
@@ -218,6 +219,11 @@ html[data-theme="dark"] .cl em { background: rgba(255,255,255,.9); color: #000; 
   .cl-ratio span { font-size: 11px; padding: 0 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .m-slide, .m-spin, .m-rest polygon { opacity: 1; transform: none; animation: none !important; }
+  .wm-motion polygon, .sym-motion polygon { transform: none; animation: none !important; }
   .b-trail { display: none; }
 }
+
+/* 메뉴 현재 위치(11/28): About > 브랜드 리소스 */
+.site-nav .has-sub:has(a[aria-current="page"]) > .sub-link { opacity: 1; }
+.sub-menu a[aria-current="page"] { background: var(--panel); }
+.sub-menu a[aria-current="page"] .sm-title::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 8px; border-radius: 50%; background: #2E9E6E; vertical-align: middle; }
