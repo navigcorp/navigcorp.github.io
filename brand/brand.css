@@ -64,19 +64,20 @@
 .id-stage.sym { aspect-ratio: 16 / 9; background: var(--panel); color: var(--ink); }
 .wm-motion { width: min(70%, 760px); fill: currentColor; overflow: visible; }
 .sym-motion { width: 34%; fill: currentColor; overflow: visible; }
-/* 로고 루프 모션 v5(11/28) "끝없는 사선": 로고 획이 자기 사선(0.375:1) 레일을 따라 위·앞으로 한 칸씩 전진한다.
-   - 각 획 바로 아래 사선 방향에 같은 획이 한 벌 더 있어, 한 칸 전진하면 다음 로고가 정확히 원래 자리에 선다. 되돌아가는 순간이 보이지 않아 처음과 끝이 없다.
-   - 회전·튕김·투명도·빛줄기 없이 위치 이동만. 왼쪽 획부터 아주 짧은 시차로 출발해 방향감만 남긴다. 멈춰 있는 동안은 원본 좌표 그대로.
-   - 카드 밖은 잘린다(id-card overflow). 화면 밖이면 정지(.is-on), 동작 줄이기 설정이면 정지. */
-.wm-motion { --t: 4.6s; --mx: 15.5%; aspect-ratio: 350.79 / 85.04; }
-.sym-motion { --t: 4.6s; --mx: 46.5%; aspect-ratio: 116.93 / 85.04; }
+/* 로고 루프 모션 v6(11/28) "제자리 사선 흐름": 획은 원본 좌표에서 한 치도 움직이지 않는다(날아가기·회전·튕김 없음).
+   - 각 획이 아래에서 위로 그려지듯 채워지고(로고의 방향, 위·앞), 머문 뒤 같은 방향으로 아래부터 걷히며, 걷히는 끝에서 다시 아래부터 채워진다.
+   - 그리는 방향과 걷히는 방향이 같아서 되감기 없이 한 방향으로 계속 흘러, 처음과 끝이 없는 루프가 된다. 왼쪽 획부터 짧은 시차.
+   - clip-path(가림)만 움직이고 위치·빛·점 효과는 쓰지 않는다. 화면 밖이면 정지(.is-on), 동작 줄이기 설정이면 정지 상태(전체 로고). */
+.wm-motion { --t: 5.2s; aspect-ratio: 350.79 / 85.04; }
+.sym-motion { --t: 5.2s; aspect-ratio: 116.93 / 85.04; }
 .m3d { position: relative; }
 .m3d > svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: currentColor; overflow: visible; }
-.m-l { will-change: transform; animation: mRail var(--t) infinite both paused; animation-delay: calc(var(--i, 0) * 35ms); }
+.m-l { clip-path: inset(0 -2% 0 -2%); animation: mFlow var(--t) infinite both paused; animation-delay: calc(var(--i, 0) * 70ms); }
 .is-on .m-l { animation-play-state: running; }
-@keyframes mRail {
-  0%, 66% { transform: translate(0, 0); animation-timing-function: cubic-bezier(.7, 0, .16, 1); }
-  100% { transform: translate(var(--mx), -170.5%); }
+@keyframes mFlow {
+  0%        { clip-path: inset(100% -2% 0 -2%); animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+  16%, 80%  { clip-path: inset(0 -2% 0 -2%); animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+  100%      { clip-path: inset(0 -2% 100% -2%); }
 }
 .id-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 24px 26px 26px; flex: 1; flex-wrap: wrap; }
 .id-meta > div:first-child { max-width: 560px; }
@@ -198,7 +199,7 @@ html[data-theme="dark"] .cl em { background: rgba(255,255,255,.9); color: #000; 
   .cl-ratio span { font-size: 11px; padding: 0 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .m-l { transform: none; animation: none !important; }
+  .m-l { clip-path: none; animation: none !important; }
   .b-trail { display: none; }
 }
 
