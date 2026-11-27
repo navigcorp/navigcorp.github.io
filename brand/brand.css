@@ -64,20 +64,46 @@
 .id-stage.sym { aspect-ratio: 16 / 9; background: var(--panel); color: var(--ink); }
 .wm-motion { width: min(70%, 760px); fill: currentColor; overflow: visible; }
 .sym-motion { width: 34%; fill: currentColor; overflow: visible; }
-/* 로고 루프 모션 v6(11/28) "제자리 사선 흐름": 획은 원본 좌표에서 한 치도 움직이지 않는다(날아가기·회전·튕김 없음).
-   - 각 획이 아래에서 위로 그려지듯 채워지고(로고의 방향, 위·앞), 머문 뒤 같은 방향으로 아래부터 걷히며, 걷히는 끝에서 다시 아래부터 채워진다.
-   - 그리는 방향과 걷히는 방향이 같아서 되감기 없이 한 방향으로 계속 흘러, 처음과 끝이 없는 루프가 된다. 왼쪽 획부터 짧은 시차.
-   - clip-path(가림)만 움직이고 위치·빛·점 효과는 쓰지 않는다. 화면 밖이면 정지(.is-on), 동작 줄이기 설정이면 정지 상태(전체 로고). */
-.wm-motion { --t: 5.2s; aspect-ratio: 350.79 / 85.04; }
-.sym-motion { --t: 5.2s; aspect-ratio: 116.93 / 85.04; }
-.m3d { position: relative; }
+/* 로고 루프 모션 v7(11/28) "N에서 NAVIG로": 대표 지시 "우아하게, N 심볼이 가운데서 생기고 펼쳐지며 AVIG가 공간감 있게 등장, 역재생처럼 N으로 돌아갔다가 다시 재생, 화면에서 완전히 사라지지 않게".
+   - N(두 획)은 카드 가운데에서 원래 자리(왼쪽)로 미끄러지고, A·V·I·G는 N 뒤 깊은 곳에 겹쳐 있다가 부채처럼 펼쳐지며 초점이 맞듯 앞으로 나와 제자리에 선다.
+   - 다 펼쳐진 상태(원본 좌표 그대로)에서 머문 뒤, 같은 길을 거꾸로 되짚어 N 하나로 모이고, 다시 펼쳐진다(alternate). N은 항상 보인다.
+   - 처음 화면에 들어올 때만 N이 가운데서 조용히 나타난다. 화면 밖이면 정지(.is-on), 동작 줄이기 설정이면 완성 로고로 정지. */
+.id-stage { perspective: 1000px; }
+.wm-motion { --t: 3.8s; aspect-ratio: 350.79 / 85.04; }
+.sym-motion { aspect-ratio: 116.93 / 85.04; }
+.m3d { position: relative; transform-style: preserve-3d; }
 .m3d > svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: currentColor; overflow: visible; }
-.m-l { clip-path: inset(0 -2% 0 -2%); animation: mFlow var(--t) infinite both paused; animation-delay: calc(var(--i, 0) * 70ms); }
-.is-on .m-l { animation-play-state: running; }
-@keyframes mFlow {
-  0%        { clip-path: inset(100% -2% 0 -2%); animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
-  16%, 80%  { clip-path: inset(0 -2% 0 -2%); animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
-  100%      { clip-path: inset(0 -2% 100% -2%); }
+.m-n, .m-w { animation-duration: var(--t); animation-iteration-count: infinite; animation-direction: alternate; animation-fill-mode: both; animation-play-state: paused; will-change: transform, opacity; }
+.m-n { animation-name: mN; transform: translate3d(33.333%, 0, 0); }
+.m-w { opacity: 0; }
+.m-w.w0 { animation-name: mW0; } .m-w.w1 { animation-name: mW1; } .m-w.w2 { animation-name: mW2; } .m-w.w3 { animation-name: mW3; }
+.is-on .m-n, .is-on .m-w { animation-play-state: running; }
+.wm-motion { opacity: 0; }
+.is-on .wm-motion { animation: mIntro 1.1s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes mIntro { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes mN {
+  0%, 14% { transform: translate3d(33.333%, 0, 0); animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+  70%, 100% { transform: translate3d(0, 0, 0); }
+}
+@keyframes mW0 { /* N 가운데 자리 뒤(깊은 곳)에서 펼쳐져 나옴 */
+  0%, 14% { opacity: 0; transform: translate3d(10.61%, 0, -220px); filter: blur(4px); animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+  38% { opacity: .5; }
+  70%, 100% { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+}
+@keyframes mW1 { /* N 가운데 자리 뒤(깊은 곳)에서 펼쳐져 나옴 */
+  0%, 14% { opacity: 0; transform: translate3d(-7.58%, 0, -220px); filter: blur(4px); animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+  43% { opacity: .5; }
+  70%, 100% { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+}
+@keyframes mW2 { /* N 가운데 자리 뒤(깊은 곳)에서 펼쳐져 나옴 */
+  0%, 14% { opacity: 0; transform: translate3d(-21.21%, 0, -220px); filter: blur(4px); animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+  48% { opacity: .5; }
+  70%, 100% { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+}
+@keyframes mW3 { /* N 가운데 자리 뒤(깊은 곳)에서 펼쳐져 나옴 */
+  0%, 14% { opacity: 0; transform: translate3d(-36.36%, 0, -220px); filter: blur(4px); animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+  53% { opacity: .5; }
+  70%, 100% { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
 }
 .id-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 24px 26px 26px; flex: 1; flex-wrap: wrap; }
 .id-meta > div:first-child { max-width: 560px; }
@@ -199,7 +225,8 @@ html[data-theme="dark"] .cl em { background: rgba(255,255,255,.9); color: #000; 
   .cl-ratio span { font-size: 11px; padding: 0 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .m-l { clip-path: none; animation: none !important; }
+  .m-n, .m-w { opacity: 1; transform: none; filter: none; animation: none !important; }
+  .wm-motion { opacity: 1; animation: none !important; }
   .b-trail { display: none; }
 }
 
