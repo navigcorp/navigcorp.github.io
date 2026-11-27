@@ -64,40 +64,69 @@
 .id-stage.sym { aspect-ratio: 16 / 9; background: var(--panel); color: var(--ink); }
 .wm-motion { width: min(70%, 760px); fill: currentColor; overflow: visible; }
 .sym-motion { width: 34%; fill: currentColor; overflow: visible; }
-/* 로고 루프 모션 v2(11/28): "멈추지 않는 한 방향".
-   획마다 로고의 사선(약 69°)을 따라 아래 슬롯에서 솟아올라 자리 잡고, 잠깐 머문 뒤 같은 방향으로 위로 빠져나간다.
-   마지막 획이 빠지는 순간 첫 획이 다시 올라와 빈 화면 없이 끝없이 이어진다.
-   쫀득함: expo 가속·감속 + 빠를 때 사선 방향으로 늘어나는 스미어 + 착지 때 눌렸다 튕김 + 퇴장 직전 눌림(예비동작) + 획별 시차.
-   transform만 쓰고(가벼움), 화면 밖이면 brand.js가 멈춘다(.is-on 해제). */
-.wm-motion polygon, .sym-motion polygon {
-  --dx: 52.5px; --dy: 140px; /* 사선 방향 이동량: dy 140(늘어난 상태도 슬롯 밖에 숨게), dx = 140 × 0.375 */
-  --a: 20.56deg;              /* 로고 사선 각도(세로 기준). 이 축으로 늘이고 눌러 속도감(스미어)을 준다 */
-  transform-box: fill-box; transform-origin: 50% 50%;
+/* 로고 루프 모션 v3(11/28) "내비게이터": 방향이 곧 움직임.
+   ① 워드마크의 A가 90° 누운 `>`(나빅의 방향 기호)가 되어 왼쪽에서 궤적 선을 끌고 들어온다(Explorer: 좌표를 찾고 궤적을 그림).
+   ② 지나가는 자리마다 N 획이 사선(0.375:1)을 타고 솟고, `>`가 몸을 틀어 A로 맞물리는 순간 V·I·G가 물결처럼 이어 선다(Direction: 갈 곳을 먼저 정함).
+   ③ 궤적 선은 A 안으로 감겨 들어가며 사라진다.
+   ④ 잠시 머문 뒤 모든 획이 왼쪽부터 살짝 눌렸다가 사선 위로 빠져나간다(Motion: 끊어지고 다시 이어지는 전진).
+   ⑤ 마지막 G가 빠지는 동안 다음 `>`가 왼쪽에서 들어와, 한 방향으로 끝없이 흐른다.
+   심볼은 사선 궤적이 먼저 그어지고 두 획이 그 위를 타고 올라 N을 만든 뒤 같은 방향으로 빠진다.
+   transform·stroke-dashoffset만 쓰고(가벼움), 화면 밖이면 brand.js가 멈춘다(.is-on 해제). 최종 정지 상태는 원본 좌표 그대로. */
+.wm-motion { --t: 5.4s; }
+.sym-motion { --t: 4.2s; }
+.wm-motion polygon, .sym-motion polygon { transform-box: fill-box; transform-origin: 50% 50%; }
+.m-l {
+  --dx: 52.5px; --dy: 140px; /* 사선 방향 이동량: dy 140, dx = 140 × 0.375 */
+  --a: 20.56deg;            /* 로고 사선 각도. 이 축으로 늘이고 눌러 속도감을 준다 */
   transform: translate(calc(var(--dx) * -1), var(--dy));
-  animation: mFlow 4.6s infinite both paused;
-  animation-delay: calc(var(--i) * 70ms);
+  animation: mRise var(--t) infinite both paused;
+  animation-delay: var(--d, 0ms);
 }
-.sym-motion polygon { animation-name: mFlowSym; animation-delay: calc(var(--i) * 160ms); }
-.is-on polygon { animation-play-state: running; }
-@keyframes mFlow {
-  0%   { transform: translate(calc(var(--dx) * -1), var(--dy)) rotate(var(--a)) scaleY(1.7) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.12, .9, .25, 1); }
-  13%  { transform: translate(1.1px, -2.9px) rotate(var(--a)) scaleY(.93) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  21%  { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1.02) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  26%  { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); }
-  68%  { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.33, 0, .67, 1); }
-  75%  { transform: translate(-.9px, 2.4px) rotate(var(--a)) scaleY(.92) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.75, 0, .9, .3); }
-  89%  { transform: translate(var(--dx), calc(var(--dy) * -1)) rotate(var(--a)) scaleY(1.8) rotate(calc(var(--a) * -1)); }
-  100% { transform: translate(var(--dx), calc(var(--dy) * -1)) rotate(var(--a)) scaleY(1.8) rotate(calc(var(--a) * -1)); }
+.m-nav {
+  --dx: 52.5px; --dy: 140px; --a: 20.56deg;
+  translate: -270px 0; rotate: 90deg;
+  animation: mNavX var(--t) infinite both paused, mNavTurn var(--t) infinite both paused, mNavSmear var(--t) infinite both paused, mNavOut var(--t) infinite both paused;
 }
-@keyframes mFlowSym {
-  0%   { transform: translate(calc(var(--dx) * -1), var(--dy)) rotate(var(--a)) scaleY(1.7) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.12, .9, .25, 1); }
-  13%  { transform: translate(1.1px, -2.9px) rotate(var(--a)) scaleY(.93) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  21%  { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1.02) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  26%  { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); }
-  68%  { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.33, 0, .67, 1); }
-  75%  { transform: translate(-.9px, 2.4px) rotate(var(--a)) scaleY(.92) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.75, 0, .9, .3); }
-  93%  { transform: translate(var(--dx), calc(var(--dy) * -1)) rotate(var(--a)) scaleY(1.8) rotate(calc(var(--a) * -1)); }
-  100% { transform: translate(var(--dx), calc(var(--dy) * -1)) rotate(var(--a)) scaleY(1.8) rotate(calc(var(--a) * -1)); }
+.m-trail { fill: none; stroke: currentColor; stroke-width: .55; stroke-dasharray: 1 1; }
+.wm-motion .m-trail { translate: -270px 0; animation: mNavX var(--t) infinite both paused, mTrailWm var(--t) infinite both paused; }
+.sym-motion .m-trail { stroke-dashoffset: 1; animation: mGuide var(--t) infinite both paused; }
+.is-on .m-l, .is-on .m-nav, .is-on .m-trail { animation-play-state: running; }
+@keyframes mRise {
+  0%    { transform: translate(calc(var(--dx) * -1), var(--dy)) rotate(var(--a)) scaleY(1.7) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.12, .9, .25, 1); }
+  9.5%  { transform: translate(1.1px, -2.9px) rotate(var(--a)) scaleY(.93) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
+  14%   { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1.02) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
+  18%   { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); }
+  76.5% { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.33, 0, .67, 1); }
+  81.5% { transform: translate(-.9px, 2.4px) rotate(var(--a)) scaleY(.92) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.75, 0, .9, .3); }
+  92%, 100% { transform: translate(var(--dx), calc(var(--dy) * -1)) rotate(var(--a)) scaleY(1.8) rotate(calc(var(--a) * -1)); }
+}
+@keyframes mNavX { /* `>`가 왼쪽에서 감속하며 들어와 A 자리에 선다 */
+  0%   { translate: -270px 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
+  17%, 100% { translate: 0px 0; }
+}
+@keyframes mNavTurn { /* 누운 `>`가 몸을 틀어 A로 맞물림(살짝 넘쳤다 돌아옴) */
+  0%   { rotate: 90deg; }
+  8%   { rotate: 90deg; animation-timing-function: cubic-bezier(.3, 1.5, .45, 1); }
+  15.5%, 100% { rotate: 0deg; }
+}
+@keyframes mNavSmear { /* 누운 상태에서 세로축 = 화면 가로축. 빠를 때 진행 방향으로 늘어남 */
+  0%   { scale: 1 1.55; animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
+  10%, 100% { scale: 1 1; }
+}
+@keyframes mNavOut { /* 퇴장은 다른 획과 같은 사선 물결(N 다음, V 앞) */
+  0%, 83% { transform: translate(0px, 0px) rotate(var(--a)) scaleY(1) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.33, 0, .67, 1); }
+  88%  { transform: translate(-.9px, 2.4px) rotate(var(--a)) scaleY(.92) rotate(calc(var(--a) * -1)); animation-timing-function: cubic-bezier(.75, 0, .9, .3); }
+  98.5%, 100% { transform: translate(var(--dx), calc(var(--dy) * -1)) rotate(var(--a)) scaleY(1.8) rotate(calc(var(--a) * -1)); }
+}
+@keyframes mTrailWm {
+  0%, 17% { stroke-dashoffset: 0; animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+  28%, 100% { stroke-dashoffset: -1; }
+}
+@keyframes mGuide {
+  0%   { stroke-dashoffset: 1; animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
+  14%  { stroke-dashoffset: 0; }
+  24%  { stroke-dashoffset: 0; animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+  40%, 100% { stroke-dashoffset: -1; }
 }
 .id-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 24px 26px 26px; flex: 1; flex-wrap: wrap; }
 .id-meta > div:first-child { max-width: 560px; }
@@ -219,7 +248,8 @@ html[data-theme="dark"] .cl em { background: rgba(255,255,255,.9); color: #000; 
   .cl-ratio span { font-size: 11px; padding: 0 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wm-motion polygon, .sym-motion polygon { transform: none; animation: none !important; }
+  .m-l, .m-nav { transform: none; translate: none; rotate: none; scale: none; animation: none !important; }
+  .m-trail { display: none; }
   .b-trail { display: none; }
 }
 
