@@ -740,3 +740,4 @@ body.sx-lock { overflow: hidden; }
 @media (min-width: 861px) { .site-header .has-sub { margin-right: clamp(14px, 1.6vw, 26px); } .site-header .sub-menu { padding-right: 0 !important; } }
 .sx-field input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
 @media (max-width: 860px) { .sx-pill { display: none; } }
+.pjb-card > img[src*="umjigim-en"] { height: 40px; }
