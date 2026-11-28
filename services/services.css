@@ -296,11 +296,13 @@ html[data-theme="dark"] .sd-case-media.is-logo { background: #f2f2f0; }
 .ent-art-connect { background: var(--white); color: var(--ink); padding: 4% 6%; }
 .ent-art-connect .cx { width: 100%; height: 100%; overflow: visible; }
 .ent-art-connect .cx-lines { opacity: .18; }
-.ent-art-connect .cx-flow path { stroke-dasharray: 18 220; animation: cx-flow 2.6s linear infinite; }
-.ent-art-connect .cx-flow path:nth-child(2) { animation-delay: .4s; } .ent-art-connect .cx-flow path:nth-child(3) { animation-delay: .8s; } .ent-art-connect .cx-flow path:nth-child(4) { animation-delay: 1.2s; }
-.ent-art-connect .cx-node { animation: cx-pop 2.6s calc(var(--k) * .4s + .9s) ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.ent-art-connect .cx-flow path { stroke-dasharray: 22 260; animation: cx-flow 2.4s linear infinite; }
+.ent-art-connect .cx-flow path:nth-child(2) { animation-delay: .25s; } .ent-art-connect .cx-flow path:nth-child(3) { animation-delay: .5s; }
+.ent-art-connect .cx-node { animation: cx-pop 2.4s calc(var(--k) * .25s + 1.2s) ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 .ent-art-connect span { position: absolute; left: 5%; bottom: 6%; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray-2); }
-@keyframes cx-flow { from { stroke-dashoffset: 238; } to { stroke-dashoffset: 0; } }
+@keyframes cx-flow { from { stroke-dashoffset: 282; } to { stroke-dashoffset: 0; } }
 @keyframes cx-pop { 0%, 70%, 100% { transform: scale(1); } 80% { transform: scale(1.08); } }
 @media (prefers-reduced-motion: reduce) { .ent-art-connect .cx-flow path, .ent-art-connect .cx-node { animation: none; } }
 .sd-scope li.sd-scope-hl h3::after { content: "PRO"; margin-left: 8px; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; padding: 3px 7px; border-radius: 999px; background: var(--ink); color: var(--white); vertical-align: 4px; }
+.ent-art-connect .cx-hub { animation: cx-hub 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes cx-hub { 0%, 100% { transform: scale(1); } 12% { transform: scale(1.05); } }
