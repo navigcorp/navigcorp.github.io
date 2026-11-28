@@ -54,3 +54,10 @@
 .pj-page .site-footer { background: #0a0a0a; color: rgba(255,255,255,.7); border-top: 1px solid rgba(255,255,255,.1); }
 .pj-page .site-footer img { filter: invert(1); }
 @media (max-width: 860px) { .pj-head { grid-template-columns: 1fr; } .pj-works { grid-template-columns: 1fr; } .pj-cards { grid-auto-columns: 82%; } .pj-page .site-header .logo img { filter: invert(1); } }
+.pj-um .pj-logo { max-width: 280px; }
+.pj-jump img { height: 30px; }
+.pj-live { display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 14px; border-radius: 15px; background: rgba(255,212,0,.14); color: var(--pj-pl); font-size: 13px; font-weight: 700; }
+.pj-live i { width: 8px; height: 8px; border-radius: 50%; background: var(--pj-pl); animation: pjLive 1.6s ease-in-out infinite; }
+@keyframes pjLive { 50% { opacity: .25; } }
+.pj-camp h3 { margin-top: 22px; }
+@media (prefers-reduced-motion: reduce) { .pj-live i { animation: none; } }
