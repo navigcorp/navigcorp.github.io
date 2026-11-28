@@ -212,20 +212,28 @@
 @keyframes kF1 { 0%, 42% { translate: 0 0 calc(var(--zf) * -1); rotate: .351 -.936 0 30deg; --kp: .16; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 86%, 100% { translate: 0 0 0; rotate: .351 -.936 0 0deg; --kp: 0; } }
 @keyframes kF2 { 0%, 42% { translate: 0 0 calc(var(--zf) * -1); rotate: .351 -.936 0 -30deg; --kp: .04; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 86%, 100% { translate: 0 0 0; rotate: .351 -.936 0 0deg; --kp: 0; } }
 @keyframes kFn { 0%, 40% { translate: 0 0 0; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 54%, 64% { translate: 0 0 var(--zf); animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 80%, 100% { translate: 0 0 0; } }
-/* 시그니처 모션 v25(11/28) 대표: "멀리서 오는 느낌 아니어도 된다. 같은 크기에서 합쳐지는데 매우 자연스럽게." 로고 변형 금지 유지.
-   - 글자 크기·모양은 처음부터 끝까지 원본 그대로. 움직이는 건 위치뿐.
-   - 가운데 N 심볼 뒤로 A·V·I·G가 한 줄(원래 간격 그대로)로 접혀 들어가 있다. N이 왼쪽 제자리로 미끄러지는 동안, 글자 줄이 N의 오른쪽 사선 가장자리 밑에서
-     줄자처럼 쭉 빠져나와 NAVIG가 된다. 역재생 때는 같은 줄이 N 밑으로 미끄러져 들어가 N 하나(심볼)로 합쳐진다.
-   - 가려지는 경계는 N의 오른쪽 사선 가장자리와 정확히 겹쳐 따라 움직여서(틈·테두리 없음) 글자가 N 밑으로 들어가는 것처럼 보인다. 반투명·흐림·크기 변화 없음.
+/* 시그니처 모션 v26(11/28) 대표: "중간에 NG처럼 다른 단어로 읽히면 안 됨. 이니셜이 다 합쳐지거나, 가운데 나침반 바늘이 핵심축이 되어 그 안으로 들어가게."
+   - 바늘이 핵심축: 카드 가운데에는 늘 나침반 바늘 하나가 있다(바늘은 크기·모양 그대로, 사라지지 않음).
+   - 펼칠 때: 바늘이 제자리(N 가운데)로 이동하는 동안, N의 양옆 면과 A·V·I·G 여섯 조각이 모두 동시에 바늘 한가운데에서 퍼져 나와 각자 자리에서 원래 크기가 된다.
+   - 모일 때(역재생): 여섯 조각이 동시에 바늘 한가운데로 빨려 들어가고 바늘 하나만 남는다.
+   - 모두 같은 순간에 같은 곡선으로 움직여서 중간에 일부 글자만 보여 다른 단어로 읽히는 순간이 없다. 글자 모양은 원본 그대로(위치와 같은 비율 크기만 변함). 반투명·흐림·가림 없음.
    - 화면 밖이면 정지(.is-on), 동작 줄이기 설정이면 원본 로고로 정지. */
-.wm-motion { --t: 3.6s; }
-.wl, .wl-train { animation-play-state: paused !important; } .is-on .wl, .is-on .wl-train { animation-play-state: running !important; }
-.wl-train { position: absolute; inset: 0; clip-path: polygon(66.382% 0, 120% 0, 120% 100%, 57.291% 100%); animation: kTrainClip var(--t) infinite alternate both; }
-.wl.l0 { translate: 33.333% 0; animation: kSigN var(--t) infinite alternate both; }
-.wl-train .wl { translate: -55% 0; animation: kTrain var(--t) infinite alternate both; }
-@keyframes kSigN { 0%, 8% { translate: 33.333% 0; animation-timing-function: cubic-bezier(.83, 0, .17, 1); } 58%, 100% { translate: 0 0; } }
-@keyframes kTrainClip { 0%, 8% { clip-path: polygon(66.382% 0, 120% 0, 120% 100%, 57.291% 100%); animation-timing-function: cubic-bezier(.83, 0, .17, 1); } 58%, 100% { clip-path: polygon(33.048% 0, 120% 0, 120% 100%, 23.957% 100%); } }
-@keyframes kTrain { 0%, 8% { translate: -55% 0; animation-timing-function: cubic-bezier(.7, 0, .2, 1); } 72%, 100% { translate: 0 0; } }
+.wm-motion { --t: 3.4s; }
+.wp { animation-play-state: paused !important; } .is-on .wp { animation-play-state: running !important; }
+.wp.p1 { transform-origin: 7.576% 50.000%; translate: 42.424% -0.000%; scale: 0; animation: kWP1 var(--t) infinite alternate both; }
+@keyframes kWP1 { 0%, 8% { translate: 42.424% -0.000%; scale: 0; animation-timing-function: cubic-bezier(.5, 0, .2, 1); } 70%, 100% { translate: 0 0; scale: 1; } }
+.wp.p2 { transform-origin: 25.758% 50.000%; translate: 24.242% 0.000%; scale: 0; animation: kWP2 var(--t) infinite alternate both; }
+@keyframes kWP2 { 0%, 8% { translate: 24.242% 0.000%; scale: 0; animation-timing-function: cubic-bezier(.5, 0, .2, 1); } 70%, 100% { translate: 0 0; scale: 1; } }
+.wp.pa { transform-origin: 39.394% 53.535%; translate: 10.606% -3.535%; scale: 0; animation: kWPa var(--t) infinite alternate both; }
+@keyframes kWPa { 0%, 8% { translate: 10.606% -3.535%; scale: 0; animation-timing-function: cubic-bezier(.5, 0, .2, 1); } 70%, 100% { translate: 0 0; scale: 1; } }
+.wp.pv { transform-origin: 57.576% 46.465%; translate: -7.576% 3.535%; scale: 0; animation: kWPv var(--t) infinite alternate both; }
+@keyframes kWPv { 0%, 8% { translate: -7.576% 3.535%; scale: 0; animation-timing-function: cubic-bezier(.5, 0, .2, 1); } 70%, 100% { translate: 0 0; scale: 1; } }
+.wp.pi { transform-origin: 71.212% 50.000%; translate: -21.212% 0.000%; scale: 0; animation: kWPi var(--t) infinite alternate both; }
+@keyframes kWPi { 0%, 8% { translate: -21.212% 0.000%; scale: 0; animation-timing-function: cubic-bezier(.5, 0, .2, 1); } 70%, 100% { translate: 0 0; scale: 1; } }
+.wp.pg { transform-origin: 86.894% 55.000%; translate: -36.894% -5.000%; scale: 0; animation: kWPg var(--t) infinite alternate both; }
+@keyframes kWPg { 0%, 8% { translate: -36.894% -5.000%; scale: 0; animation-timing-function: cubic-bezier(.5, 0, .2, 1); } 70%, 100% { translate: 0 0; scale: 1; } }
+.wp.pn { translate: 33.333% 0; animation: kWPn var(--t) infinite alternate both; }
+@keyframes kWPn { 0%, 8% { translate: 33.333% 0; animation-timing-function: cubic-bezier(.5, 0, .2, 1); } 70%, 100% { translate: 0 0; } }
 /* 심볼 카드: 같은 흐름을 왕복(점은 남음) */
 .s-sq { left: 13.635%; animation: kGrow var(--t) infinite alternate both, kTwist var(--t) infinite alternate both, kSpin var(--t) infinite alternate both, kLitA var(--t) linear infinite alternate both, kSwapA var(--t) infinite alternate both; }
 .s-grp { transform-origin: 50% 50%; visibility: hidden; animation: kGrp var(--t) linear infinite alternate both, kSwapB var(--t) infinite alternate both; }
@@ -497,7 +505,6 @@ html[data-theme="dark"] .cl em { background: rgba(255,255,255,.9); color: #000; 
 @media (prefers-reduced-motion: reduce) {
   .m3d svg, .m3d .m-grp, .m3d .s-grp { opacity: 1 !important; visibility: visible !important; translate: none !important; rotate: none !important; scale: none !important; transform: none !important; clip-path: none !important; animation: none !important; }
   .m3d .lyr.front svg { fill: currentColor; }
-  .m3d .wl-train { clip-path: none !important; animation: none !important; }
   .m3d .sk { display: none; }
   .lyr.front .s-n { display: block !important; }
   .m3d .nd-sq { display: none; }
