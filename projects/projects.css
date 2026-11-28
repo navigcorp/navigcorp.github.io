@@ -67,3 +67,9 @@
 .pj-jump img.pj-um-sym { border-radius: 3px; }
 .pj-jump a::after { content: "\2193"; margin-left: auto; padding-left: 12px; font-size: 15px; opacity: .55; transition: transform .25s var(--ease), opacity .25s; }
 .pj-jump a:hover::after { transform: translateY(3px); opacity: 1; }
+.pj-join p.pj-join-lead { max-width: none; }
+@media (min-width: 861px) { .pj-join p.pj-join-lead { white-space: nowrap; } }
+.pj-card { min-height: 280px; }
+.pj-st { margin-top: auto; padding-top: 0; }
+.pj-card p:not(.pj-q) { margin-bottom: 22px; }
+.pj-cards { scrollbar-width: none; } .pj-cards::-webkit-scrollbar { display: none; }
