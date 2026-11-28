@@ -88,7 +88,50 @@
 /* 공통 동작 */
 @keyframes kGrow { 0% { scale: .12; animation-timing-function: cubic-bezier(.3, 0, .2, 1); } 30%, 100% { scale: 1; } }
 @keyframes kTwist { 0% { transform: perspective(420px) rotate3d(-0.0822, -0.9946, -0.0638, 0deg) rotateZ(0deg) scale(.713); animation-timing-function: cubic-bezier(.45, 0, .25, 1); } 40%, 100% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 75.95deg) rotateZ(45deg) scale(.713); } }
-@keyframes kLitA { 0% { --k: 0; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 22% { --k: .16; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 40%, 100% { --k: 0; } }
+@keyframes kLitA { /* 네모가 공간에서 돌며 조명을 받는다: 처음엔 살짝 그늘, 빛 쪽으로 돌 때 가장 밝고, 지나치며 어두워졌다가 바늘이 되며 원래 밝기로 */
+  0.0% { --k: 0.140; }
+  1.0% { --k: 0.136; }
+  2.0% { --k: 0.125; }
+  3.0% { --k: 0.110; }
+  4.0% { --k: 0.091; }
+  5.0% { --k: 0.070; }
+  6.0% { --k: 0.049; }
+  7.0% { --k: 0.030; }
+  8.0% { --k: 0.015; }
+  9.0% { --k: 0.004; }
+  10.0% { --k: 0.000; }
+  11.0% { --k: 0.000; }
+  12.0% { --k: 0.000; }
+  13.0% { --k: 0.000; }
+  14.0% { --k: 0.006; }
+  15.0% { --k: 0.024; }
+  16.0% { --k: 0.050; }
+  17.0% { --k: 0.083; }
+  18.0% { --k: 0.120; }
+  19.0% { --k: 0.160; }
+  20.0% { --k: 0.200; }
+  21.0% { --k: 0.237; }
+  22.0% { --k: 0.270; }
+  23.0% { --k: 0.296; }
+  24.0% { --k: 0.314; }
+  25.0% { --k: 0.320; }
+  26.0% { --k: 0.316; }
+  27.0% { --k: 0.304; }
+  28.0% { --k: 0.288; }
+  29.0% { --k: 0.270; }
+  30.0% { --k: 0.252; }
+  31.0% { --k: 0.236; }
+  32.0% { --k: 0.224; }
+  33.0% { --k: 0.220; }
+  34.0% { --k: 0.208; }
+  35.0% { --k: 0.176; }
+  36.0% { --k: 0.133; }
+  37.0% { --k: 0.087; }
+  38.0% { --k: 0.044; }
+  39.0% { --k: 0.012; }
+  40.0% { --k: 0.000; }
+  40%, 100% { --k: 0; }
+}
 @keyframes kSpin { 0%, 18% { rotate: -720deg; animation-timing-function: cubic-bezier(0.4, 0, 0.3, 1); } 95%, 100% { rotate: 0deg; } }
 @keyframes kGrp {
   0.00% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-720.00deg); --k: 0.000; }
@@ -170,7 +213,7 @@
 @keyframes kF2 { 0%, 42% { translate: 0 0 calc(var(--zf) * -1); rotate: .351 -.936 0 -30deg; --kp: .04; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 86%, 100% { translate: 0 0 0; rotate: .351 -.936 0 0deg; --kp: 0; } }
 @keyframes kFn { 0%, 40% { translate: 0 0 0; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 54%, 64% { translate: 0 0 var(--zf); animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 80%, 100% { translate: 0 0 0; } }
 /* 시그니처: 처음 한 번 */
-.m-sq { left: 37.879%; animation: kGrow var(--in) both, kTwist var(--in) both, kSpin var(--in) both, kLitA var(--in) both, kSwapA var(--in) both; }
+.m-sq { left: 37.879%; animation: kGrow var(--in) both, kTwist var(--in) both, kSpin var(--in) both, kLitA var(--in) linear both, kSwapA var(--in) both; }
 .m-grp { transform-origin: 16.667% 50%; translate: 33.333% 0; visibility: hidden; animation: kGrp var(--in) linear both, kSwapB var(--in) both, mN var(--t) var(--in) infinite alternate; }
 .m-n { transform-origin: 16.667% 50%; scale: 0; }
 .m-n.n1 { animation: kOpen var(--in) both, kF1 var(--in) both; }
@@ -186,13 +229,17 @@
 .m-w.w3 { transform-origin: 72.73% 50%; scale: 0; animation: mW3 var(--t) var(--in) infinite alternate; }
 @keyframes mW3 { 0%, 58% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 84%, 100% { scale: 1; } }
 /* 심볼 카드: 같은 흐름을 왕복(점은 남음) */
-.s-sq { left: 13.635%; animation: kGrow var(--t) infinite alternate both, kTwist var(--t) infinite alternate both, kSpin var(--t) infinite alternate both, kLitA var(--t) infinite alternate both, kSwapA var(--t) infinite alternate both; }
+.s-sq { left: 13.635%; animation: kGrow var(--t) infinite alternate both, kTwist var(--t) infinite alternate both, kSpin var(--t) infinite alternate both, kLitA var(--t) linear infinite alternate both, kSwapA var(--t) infinite alternate both; }
 .s-grp { transform-origin: 50% 50%; visibility: hidden; animation: kGrp var(--t) linear infinite alternate both, kSwapB var(--t) infinite alternate both; }
 .s-n { transform-origin: 50% 50%; scale: 0; }
 .s-n.n1 { animation: kOpen var(--t) infinite alternate both, kF1 var(--t) infinite alternate both; }
 .s-n.n2 { animation: kOpen var(--t) infinite alternate both, kF2 var(--t) infinite alternate both; }
 .s-nd { animation: kFn var(--t) infinite alternate both; }
-/* v20(11/28) 대표: "바늘 하나에서 셋으로 갈라지는 과정을 더 매끄럽게, 끊김 없이 계속 움직이게, N이 된 뒤 통째로 한 바퀴 돌린 다음 역재생" →
+/* v21b(11/28) 대표: "점이 바늘로 바뀔 때도 조명이 비춰진 느낌, 입체감" → 네모(바늘이 되는 면)가 도는 동안 면 전체 밝기가 조명 각도에 따라 바뀐다(살짝 그늘 → 빛을 받아 가장 밝음 → 지나치며 어두워짐 → 바늘). 한 면 한 색, 그라데이션 없음.
+   v21(11/28) 대표: "양쪽 라인이 너무 똑같고 기계적. 물리적인 힘을 반영해 자연스럽게" →
+   두 면을 스프링·감쇠 모델로 계산해 각자 다르게 움직인다: 회전이 빠를 때 원심력처럼 바깥으로 밀려 나가고, 회전 방향 뒤로 살짝 끌리다(관성) 자리를 잡는다.
+   왼쪽 면은 가볍고 먼저(더 빠른 스프링), 오른쪽 면은 무겁고 늦게(느린 스프링·더 큰 끌림), 접히는 각도도 서로 다르다(26° / 17°). 끝 모양은 원본과 같다.
+   v20(11/28) 대표: "바늘 하나에서 셋으로 갈라지는 과정을 더 매끄럽게, 끊김 없이 계속 움직이게, N이 된 뒤 통째로 한 바퀴 돌린 다음 역재생" →
    회전을 처음부터 끝까지 하나의 곡선(두 바퀴, -720° → 0°)으로 묶어 멈춤 없이 계속 돈다. 앞 바퀴 동안 네모→바늘→갈라짐(부드럽게 시작해 길게 이어짐), N이 완성된 뒤 나머지 한 바퀴를 N 통째로 돌며 살짝 기울었다 정면에 멈춘다. 그 뒤 왕복(역재생).
    v19(11/28) 대표: "바늘에서 빠져나오는 느낌이 안 든다" → 양옆 면을 바늘의 복제로 만든다.
    스위치 순간 두 면은 바늘과 똑같은 모양·자리(바늘 뒤에 겹쳐 안 보임)에 있다가, 바늘이 갈라지듯 왼쪽·오른쪽으로 미끄러져 나오며 바늘 모양에서 사선 면 모양으로 바뀐다.
@@ -202,14 +249,130 @@
 .m-sk { left: 4.545%; } .s-sk { left: 13.635%; }
 .lyr.front .m-n, .lyr.front .s-n { display: none; }
 @keyframes kSplit1 {
-  0%, 40% { transform: translate(0%, 0) skewX(7.12deg) scale(.1768, .7071) rotate(45deg); translate: 0 0 calc(var(--zf) * -1); rotate: .351 -.936 0 0deg; --kp: 0; animation-timing-function: cubic-bezier(.5, 0, .2, 1); }
-  56% { rotate: .351 -.936 0 24deg; --kp: .14; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  72%, 100% { transform: translate(-37.494%, 0) skewX(-20.556deg) scale(.25, 1) rotate(0deg); translate: 0 0 0; rotate: .351 -.936 0 0deg; --kp: 0; }
+  0.00% { transform: rotate(0.00deg) translate(0.000%, 0) skewX(7.120deg) scale(0.1768, 0.7071) rotate(45.000deg); translate: 0 0 calc(var(--zf) * -1.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  40.00% { transform: rotate(0.00deg) translate(0.000%, 0) skewX(7.120deg) scale(0.1768, 0.7071) rotate(45.000deg); translate: 0 0 calc(var(--zf) * -1.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  41.00% { transform: rotate(-5.71deg) translate(-3.937%, 0) skewX(4.214deg) scale(0.1845, 0.7379) rotate(40.275deg); translate: 0 0 calc(var(--zf) * -0.895); rotate: .351 -.936 0 9.77deg; --kp: 0.056; }
+  42.00% { transform: rotate(-13.25deg) translate(-11.463%, 0) skewX(-1.342deg) scale(0.1992, 0.7967) rotate(31.242deg); translate: 0 0 calc(var(--zf) * -0.694); rotate: .351 -.936 0 22.08deg; --kp: 0.127; }
+  43.00% { transform: rotate(-15.85deg) translate(-19.447%, 0) skewX(-7.235deg) scale(0.2148, 0.8590) rotate(21.660deg); translate: 0 0 calc(var(--zf) * -0.481); rotate: .351 -.936 0 25.96deg; --kp: 0.150; }
+  44.00% { transform: rotate(-13.40deg) translate(-26.298%, 0) skewX(-12.292deg) scale(0.2281, 0.9125) rotate(13.437deg); translate: 0 0 calc(var(--zf) * -0.299); rotate: .351 -.936 0 21.78deg; --kp: 0.126; }
+  45.00% { transform: rotate(-8.65deg) translate(-31.443%, 0) skewX(-16.089deg) scale(0.2382, 0.9527) rotate(7.263deg); translate: 0 0 calc(var(--zf) * -0.161); rotate: .351 -.936 0 14.08deg; --kp: 0.081; }
+  46.00% { transform: rotate(-4.08deg) translate(-34.896%, 0) skewX(-18.638deg) scale(0.2449, 0.9797) rotate(3.118deg); translate: 0 0 calc(var(--zf) * -0.069); rotate: .351 -.936 0 6.71deg; --kp: 0.039; }
+  47.00% { transform: rotate(-0.87deg) translate(-36.959%, 0) skewX(-20.161deg) scale(0.2490, 0.9958) rotate(0.642deg); translate: 0 0 calc(var(--zf) * -0.014); rotate: .351 -.936 0 1.46deg; --kp: 0.008; }
+  48.00% { transform: rotate(-0.00deg) translate(-38.015%, 0) skewX(-20.941deg) scale(0.2510, 1.0041) rotate(-0.626deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  49.00% { transform: rotate(-0.00deg) translate(-38.421%, 0) skewX(-21.240deg) scale(0.2518, 1.0072) rotate(-1.113deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  50.00% { transform: rotate(-0.00deg) translate(-38.456%, 0) skewX(-21.266deg) scale(0.2519, 1.0075) rotate(-1.154deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  51.00% { transform: rotate(-0.00deg) translate(-38.313%, 0) skewX(-21.161deg) scale(0.2516, 1.0064) rotate(-0.983deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  52.00% { transform: rotate(-0.00deg) translate(-38.114%, 0) skewX(-21.013deg) scale(0.2512, 1.0048) rotate(-0.744deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  53.00% { transform: rotate(-0.00deg) translate(-37.921%, 0) skewX(-20.871deg) scale(0.2508, 1.0033) rotate(-0.512deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  54.00% { transform: rotate(-0.00deg) translate(-37.764%, 0) skewX(-20.755deg) scale(0.2505, 1.0021) rotate(-0.323deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  55.00% { transform: rotate(-0.00deg) translate(-37.648%, 0) skewX(-20.670deg) scale(0.2503, 1.0012) rotate(-0.185deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  56.00% { transform: rotate(-0.00deg) translate(-37.570%, 0) skewX(-20.612deg) scale(0.2501, 1.0006) rotate(-0.092deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  57.00% { transform: rotate(-0.00deg) translate(-37.522%, 0) skewX(-20.577deg) scale(0.2501, 1.0002) rotate(-0.034deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  58.00% { transform: rotate(-0.00deg) translate(-37.496%, 0) skewX(-20.557deg) scale(0.2500, 1.0000) rotate(-0.002deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  59.00% { transform: rotate(-0.01deg) translate(-37.483%, 0) skewX(-20.548deg) scale(0.2500, 0.9999) rotate(0.013deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.03deg; --kp: 0.000; }
+  60.00% { transform: rotate(-0.01deg) translate(-37.479%, 0) skewX(-20.545deg) scale(0.2500, 0.9999) rotate(0.018deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.04deg; --kp: 0.000; }
+  61.00% { transform: rotate(-0.01deg) translate(-37.479%, 0) skewX(-20.545deg) scale(0.2500, 0.9999) rotate(0.018deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.04deg; --kp: 0.000; }
+  62.00% { transform: rotate(-0.01deg) translate(-37.481%, 0) skewX(-20.547deg) scale(0.2500, 0.9999) rotate(0.015deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.04deg; --kp: 0.000; }
+  63.00% { transform: rotate(-0.01deg) translate(-37.484%, 0) skewX(-20.549deg) scale(0.2500, 0.9999) rotate(0.012deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.03deg; --kp: 0.000; }
+  64.00% { transform: rotate(-0.01deg) translate(-37.487%, 0) skewX(-20.551deg) scale(0.2500, 0.9999) rotate(0.009deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.02deg; --kp: 0.000; }
+  65.00% { transform: rotate(-0.00deg) translate(-37.489%, 0) skewX(-20.552deg) scale(0.2500, 1.0000) rotate(0.006deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.01deg; --kp: 0.000; }
+  66.00% { transform: rotate(-0.00deg) translate(-37.491%, 0) skewX(-20.554deg) scale(0.2500, 1.0000) rotate(0.004deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.01deg; --kp: 0.000; }
+  67.00% { transform: rotate(-0.00deg) translate(-37.492%, 0) skewX(-20.555deg) scale(0.2500, 1.0000) rotate(0.002deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.01deg; --kp: 0.000; }
+  68.00% { transform: rotate(-0.00deg) translate(-37.493%, 0) skewX(-20.555deg) scale(0.2500, 1.0000) rotate(0.001deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  69.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.001deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  70.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  71.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  72.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  73.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  74.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  75.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  76.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  77.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  78.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  79.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  80.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  81.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  82.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  83.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  84.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  85.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  86.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  87.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  88.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  89.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  90.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  91.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  92.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  93.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  94.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  95.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  96.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  97.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  98.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  99.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
+  100.00% { transform: rotate(-0.00deg) translate(-37.494%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 0.00deg; --kp: 0.000; }
 }
 @keyframes kSplit2 {
-  0%, 40% { transform: translate(0%, 0) skewX(7.12deg) scale(.1768, .7071) rotate(45deg); translate: 0 0 calc(var(--zf) * -1); rotate: .351 -.936 0 0deg; --kp: 0; animation-timing-function: cubic-bezier(.5, 0, .2, 1); }
-  56% { rotate: .351 -.936 0 -24deg; --kp: .05; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  72%, 100% { transform: translate(37.506%, 0) skewX(-20.556deg) scale(.25, 1) rotate(0deg); translate: 0 0 0; rotate: .351 -.936 0 0deg; --kp: 0; }
+  0.00% { transform: rotate(0.00deg) translate(0.000%, 0) skewX(7.120deg) scale(0.1768, 0.7071) rotate(45.000deg); translate: 0 0 calc(var(--zf) * -0.700); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  42.50% { transform: rotate(0.00deg) translate(0.000%, 0) skewX(7.120deg) scale(0.1768, 0.7071) rotate(45.000deg); translate: 0 0 calc(var(--zf) * -0.700); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  43.50% { transform: rotate(-6.86deg) translate(2.916%, 0) skewX(4.968deg) scale(0.1825, 0.7299) rotate(41.501deg); translate: 0 0 calc(var(--zf) * -0.646); rotate: .351 -.936 0 -4.88deg; --kp: 0.017; }
+  44.50% { transform: rotate(-17.45deg) translate(8.958%, 0) skewX(0.510deg) scale(0.1943, 0.7771) rotate(34.252deg); translate: 0 0 calc(var(--zf) * -0.533); rotate: .351 -.936 0 -12.36deg; --kp: 0.044; }
+  45.50% { transform: rotate(-23.35deg) translate(15.989%, 0) skewX(-4.679deg) scale(0.2080, 0.8320) rotate(25.816deg); translate: 0 0 calc(var(--zf) * -0.402); rotate: .351 -.936 0 -16.63deg; --kp: 0.059; }
+  46.50% { transform: rotate(-22.53deg) translate(22.667%, 0) skewX(-9.606deg) scale(0.2210, 0.8841) rotate(17.804deg); translate: 0 0 calc(var(--zf) * -0.277); rotate: .351 -.936 0 -16.26deg; --kp: 0.057; }
+  47.50% { transform: rotate(-17.12deg) translate(28.285%, 0) skewX(-13.752deg) scale(0.2320, 0.9280) rotate(11.063deg); translate: 0 0 calc(var(--zf) * -0.172); rotate: .351 -.936 0 -12.61deg; --kp: 0.044; }
+  48.50% { transform: rotate(-10.24deg) translate(32.587%, 0) skewX(-16.926deg) scale(0.2404, 0.9616) rotate(5.902deg); translate: 0 0 calc(var(--zf) * -0.092); rotate: .351 -.936 0 -7.75deg; --kp: 0.027; }
+  49.50% { transform: rotate(-4.19deg) translate(35.606%, 0) skewX(-19.154deg) scale(0.2463, 0.9852) rotate(2.280deg); translate: 0 0 calc(var(--zf) * -0.035); rotate: .351 -.936 0 -3.27deg; --kp: 0.012; }
+  50.50% { transform: rotate(-0.00deg) translate(37.529%, 0) skewX(-20.573deg) scale(0.2500, 1.0002) rotate(-0.027deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  51.50% { transform: rotate(-0.00deg) translate(38.602%, 0) skewX(-21.365deg) scale(0.2521, 1.0086) rotate(-1.315deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  52.50% { transform: rotate(-0.00deg) translate(39.073%, 0) skewX(-21.713deg) scale(0.2531, 1.0122) rotate(-1.880deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  53.50% { transform: rotate(-0.00deg) translate(39.153%, 0) skewX(-21.772deg) scale(0.2532, 1.0129) rotate(-1.977deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  54.50% { transform: rotate(-0.00deg) translate(39.008%, 0) skewX(-21.665deg) scale(0.2529, 1.0117) rotate(-1.803deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  55.50% { transform: rotate(-0.00deg) translate(38.756%, 0) skewX(-21.479deg) scale(0.2524, 1.0098) rotate(-1.500deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  56.50% { transform: rotate(-0.00deg) translate(38.475%, 0) skewX(-21.271deg) scale(0.2519, 1.0076) rotate(-1.162deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  57.50% { transform: rotate(-0.00deg) translate(38.210%, 0) skewX(-21.076deg) scale(0.2514, 1.0055) rotate(-0.845deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  58.50% { transform: rotate(-0.00deg) translate(37.985%, 0) skewX(-20.909deg) scale(0.2509, 1.0037) rotate(-0.574deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  59.50% { transform: rotate(-0.00deg) translate(37.807%, 0) skewX(-20.778deg) scale(0.2506, 1.0023) rotate(-0.361deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  60.50% { transform: rotate(-0.00deg) translate(37.675%, 0) skewX(-20.681deg) scale(0.2503, 1.0013) rotate(-0.203deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  61.50% { transform: rotate(-0.00deg) translate(37.583%, 0) skewX(-20.613deg) scale(0.2502, 1.0006) rotate(-0.093deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  62.50% { transform: rotate(-0.00deg) translate(37.524%, 0) skewX(-20.569deg) scale(0.2500, 1.0001) rotate(-0.021deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  63.50% { transform: rotate(-0.02deg) translate(37.489%, 0) skewX(-20.543deg) scale(0.2500, 0.9999) rotate(0.021deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.03deg; --kp: 0.000; }
+  64.50% { transform: rotate(-0.04deg) translate(37.471%, 0) skewX(-20.530deg) scale(0.2499, 0.9997) rotate(0.042deg); translate: 0 0 calc(var(--zf) * -0.001); rotate: .351 -.936 0 -0.06deg; --kp: 0.000; }
+  65.50% { transform: rotate(-0.04deg) translate(37.464%, 0) skewX(-20.525deg) scale(0.2499, 0.9997) rotate(0.050deg); translate: 0 0 calc(var(--zf) * -0.001); rotate: .351 -.936 0 -0.08deg; --kp: 0.000; }
+  66.50% { transform: rotate(-0.04deg) translate(37.465%, 0) skewX(-20.526deg) scale(0.2499, 0.9997) rotate(0.049deg); translate: 0 0 calc(var(--zf) * -0.001); rotate: .351 -.936 0 -0.07deg; --kp: 0.000; }
+  67.50% { transform: rotate(-0.03deg) translate(37.470%, 0) skewX(-20.529deg) scale(0.2499, 0.9997) rotate(0.044deg); translate: 0 0 calc(var(--zf) * -0.001); rotate: .351 -.936 0 -0.07deg; --kp: 0.000; }
+  68.50% { transform: rotate(-0.03deg) translate(37.476%, 0) skewX(-20.534deg) scale(0.2499, 0.9998) rotate(0.036deg); translate: 0 0 calc(var(--zf) * -0.001); rotate: .351 -.936 0 -0.05deg; --kp: 0.000; }
+  69.50% { transform: rotate(-0.02deg) translate(37.482%, 0) skewX(-20.539deg) scale(0.2500, 0.9998) rotate(0.028deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.04deg; --kp: 0.000; }
+  70.50% { transform: rotate(-0.01deg) translate(37.488%, 0) skewX(-20.543deg) scale(0.2500, 0.9999) rotate(0.021deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.03deg; --kp: 0.000; }
+  71.50% { transform: rotate(-0.01deg) translate(37.494%, 0) skewX(-20.547deg) scale(0.2500, 0.9999) rotate(0.015deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.02deg; --kp: 0.000; }
+  72.50% { transform: rotate(-0.01deg) translate(37.498%, 0) skewX(-20.550deg) scale(0.2500, 0.9999) rotate(0.010deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.02deg; --kp: 0.000; }
+  73.50% { transform: rotate(-0.00deg) translate(37.501%, 0) skewX(-20.552deg) scale(0.2500, 1.0000) rotate(0.006deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.01deg; --kp: 0.000; }
+  74.50% { transform: rotate(-0.00deg) translate(37.503%, 0) skewX(-20.554deg) scale(0.2500, 1.0000) rotate(0.004deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.01deg; --kp: 0.000; }
+  75.50% { transform: rotate(-0.00deg) translate(37.505%, 0) skewX(-20.555deg) scale(0.2500, 1.0000) rotate(0.002deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  76.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  77.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  78.50% { transform: rotate(-0.00deg) translate(37.507%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.001deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  79.50% { transform: rotate(-0.00deg) translate(37.507%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.001deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  80.50% { transform: rotate(-0.00deg) translate(37.507%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.001deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  81.50% { transform: rotate(-0.00deg) translate(37.507%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.001deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  82.50% { transform: rotate(-0.00deg) translate(37.507%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.001deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  83.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  84.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  85.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  86.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  87.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  88.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  89.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  90.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  91.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(-0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  92.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  93.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  94.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  95.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  96.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  97.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  98.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  99.50% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
+  100.00% { transform: rotate(-0.00deg) translate(37.506%, 0) skewX(-20.556deg) scale(0.2500, 1.0000) rotate(0.000deg); translate: 0 0 calc(var(--zf) * -0.000); rotate: .351 -.936 0 -0.00deg; --kp: 0.000; }
 }
 @property --kp { syntax: "<number>"; inherits: false; initial-value: 0; }
 .m-sk.s1 { animation: kSplit1 var(--in) both; } .m-sk.s2 { animation: kSplit2 var(--in) both; }
