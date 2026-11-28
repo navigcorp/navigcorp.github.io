@@ -741,3 +741,21 @@ body.sx-lock { overflow: hidden; }
 .sx-field input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
 @media (max-width: 860px) { .sx-pill { display: none; } }
 .pjb-card > img[src*="umjigim-en"] { height: 40px; }
+
+/* '지금, 나빅은' 띠: 사이트 흑백 톤에 맞춤 (테마를 따름) */
+.pj-band { background: var(--white); color: var(--ink); border-top: 1px solid var(--line) !important; }
+.pj-band .pjb-kicker { color: var(--gray-2); }
+.pj-band .pjb-title { color: var(--ink); }
+.pjb-card { background: var(--panel); border: 1px solid var(--line); color: var(--ink); }
+.pjb-card:hover { border-color: var(--dim); }
+.pjb-um, .pjb-pl { background: var(--panel); }
+.pjb-card p { color: var(--gray-1); }
+.pjb-um .pjb-chip { background: #ff7a00; color: #fff; }
+.pjb-pl .pjb-chip { background: #f5c400; color: #111; }
+.pj-band .pjb-btn { color: var(--ink); border-color: currentColor; }
+.pj-band .pjb-btn:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.pjb-card > img { height: 40px; width: auto; align-self: flex-start; margin-bottom: auto; }
+.pjb-card > img.th-dark + * { margin-top: 0; }
+.th-dark { display: none !important; }
+html[data-theme="dark"] .th-dark { display: inline-block !important; }
+html[data-theme="dark"] .th-light { display: none !important; }
