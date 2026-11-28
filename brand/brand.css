@@ -64,35 +64,41 @@
 .id-stage.sym { aspect-ratio: 16 / 9; background: var(--panel); color: var(--ink); }
 .wm-motion { width: min(70%, 760px); fill: currentColor; overflow: visible; }
 .sym-motion { width: 34%; fill: currentColor; overflow: visible; }
-/* 로고 루프 모션 v10(11/28) 대표: "N에 테두리(베젤) 느낌 없이 글자가 모일 것, 애플 수준의 모션 텐션, 심볼은 원→바늘 말고 다른 방식"
-   - 가림(clip)·반투명·흐림 없음. 모든 조각은 불투명한 원본 도형이 위치·크기·회전만 바뀐다.
-   - 심볼: 작은 바늘(마름모)이 나침반처럼 돌며 커져 자리를 잡고, 바늘 위·아래 끝에서 두 사선 획이 뻗어 나와 N이 된다. 되돌아갈 때 획은 바늘 끝으로 접혀 들어가고 바늘은 작은 점 크기로 돌아가 남는다.
-   - 워드마크: 처음 한 번 심볼과 같은 방식으로 N이 생긴 뒤, N이 원래 자리로 미끄러지고, 그 뒤를 따라 A·V·I·G가 각자 왼쪽 끝에서 차례로 펼쳐진다(글자끼리 겹치지 않음).
-     모일 때는 G부터 거꾸로 왼쪽 이웃 쪽으로 접혀 들어가 마지막에 A가 N 옆으로 접히고, N이 다시 가운데로 간다(경계선·가림 없음).
-   - 펼침·접힘 때 바늘이 나침반처럼 좌우로 흔들리다 멈춘다. 이징은 expo 계열(출발은 단단하게, 도착은 길게 감속).
-   - 왕복(alternate) 무한 반복, 사라지는 순간 없음. 화면 밖이면 정지(.is-on), 동작 줄이기 설정이면 완성 로고로 정지. */
+/* 로고 루프 모션 v11(11/28) 대표: "아무것도 없던 곳에 작은 네모가 생기고, 네모가 비틀어지며 바늘 구도로 바뀌고, 바늘에서 시작된 면들이 N을 만든다. 바늘에서 시작해 바늘로 끝나고, 사라질 땐 완전히 사라졌다 다시 생긴다. 시그니처의 바늘은 움직일 때만 잠깐."
+   - 바늘은 정사각형 하나(.nd-sq)를 회전·비율·기울기만으로 비튼 것. 끝 모양은 원본 바늘 마름모와 같은 평행사변형이다(가림·반투명·흐림 없음).
+   - 심볼 카드: 없음 → 작은 네모 → 비틀리며 바늘 → 바늘 위·아래 끝에서 두 사선 면이 뻗어 N → 머묾 → 면이 바늘 끝으로 쏙 들어가고 → 바늘이 네모로 풀리고 → 사라짐. 왕복 반복.
+   - 시그니처: 처음 한 번 같은 방식으로 N이 생긴다. 이후 N이 원래 자리로 미끄러지는 동안에만 바늘이 짧게 흔들리고, 멈춰 있을 땐 움직이지 않는다.
+     N이 자리 잡으면 A·V·I·G가 각자 왼쪽 끝에서 차례로 펼쳐지고, 모일 땐 G부터 역순으로 접혀 N만 남은 뒤 N이 가운데로 돌아간다(왕복 반복).
+   - 이징은 expo 계열. 화면 밖이면 정지(.is-on), 동작 줄이기 설정이면 완성 로고로 정지. */
 .id-stage { perspective: none; }
-.wm-motion { --t: 3.4s; --in: 2s; aspect-ratio: 350.79 / 85.04; }
-.sym-motion { --t: 3.2s; aspect-ratio: 116.93 / 85.04; }
+.wm-motion { --t: 3.4s; --in: 2.4s; aspect-ratio: 350.79 / 85.04; }
+.sym-motion { --t: 3.4s; aspect-ratio: 116.93 / 85.04; }
 .m3d { position: relative; }
 .m3d svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: currentColor; overflow: visible; }
-.m3d svg { animation-play-state: paused !important; }
-.is-on .m3d svg { animation-play-state: running !important; }
-/* 워드마크: N 생성(한 번) 후 왕복 */
-.m-n, .m-nd { translate: 33.333% 0; }
-.m-nd { transform-origin: 16.667% 50%; animation: mNdIn var(--in) cubic-bezier(.16, 1, .3, 1) both, mN var(--t) var(--in) infinite alternate, mNdSwing var(--t) var(--in) infinite alternate; }
-.m-n.n1 { transform-origin: 15.152% 0%; animation: mStrIn var(--in) both, mN var(--t) var(--in) infinite alternate; }
-.m-n.n2 { transform-origin: 18.182% 100%; animation: mStrIn2 var(--in) both, mN var(--t) var(--in) infinite alternate; }
-@keyframes mNdIn { 0% { scale: .16; rotate: -180deg; } 55%, 100% { scale: 1; rotate: 0deg; } }
-@keyframes mStrIn { 0%, 38% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 92%, 100% { scale: 1; } }
-@keyframes mStrIn2 { 0%, 46% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 100% { scale: 1; } }
+.m3d svg, .m3d .nd-sq { animation-play-state: paused !important; }
+.is-on .m3d svg, .is-on .m3d .nd-sq { animation-play-state: running !important; }
+.m-nd, .s-nd { opacity: 0; }
+.nd-sq { position: absolute; top: 0; height: 100%; aspect-ratio: 1; background: currentColor; transform-origin: 50% 50%; transform: skewX(0deg) scale(0, 0) rotate(0deg); }
+/* 시그니처 */
+.m-sq { left: 37.879%; translate: 0 0; animation: mSqIn var(--in) both, mSqMove var(--t) var(--in) infinite alternate, mSqSwing var(--t) var(--in) infinite alternate; }
+.m-n { translate: 33.333% 0; }
+.m-n.n1 { transform-origin: 15.152% 0%; scale: 0; animation: mStrIn var(--in) both, mN var(--t) var(--in) infinite alternate; }
+.m-n.n2 { transform-origin: 18.182% 100%; scale: 0; animation: mStrIn2 var(--in) both, mN var(--t) var(--in) infinite alternate; }
+@keyframes mSqIn {
+  0%   { transform: skewX(0deg) scale(0, 0) rotate(0deg); animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
+  16%  { transform: skewX(0deg) scale(.13, .13) rotate(0deg); animation-timing-function: cubic-bezier(.7, 0, .2, 1); }
+  34%  { transform: skewX(3deg) scale(.26, .42) rotate(28deg); animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
+  56%, 100% { transform: skewX(7.12deg) scale(.1768, .7071) rotate(45deg); }
+}
+@keyframes mStrIn { 0%, 52% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 90%, 100% { scale: 1; } }
+@keyframes mStrIn2 { 0%, 60% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 100% { scale: 1; } }
 @keyframes mN { 0%, 10% { translate: 33.333% 0; animation-timing-function: cubic-bezier(.83, 0, .17, 1); } 52%, 100% { translate: 0 0; } }
-@keyframes mNdSwing { /* 나침반 바늘처럼 흔들리다 멈춤 */
-  0%, 24% { rotate: 0deg; animation-timing-function: cubic-bezier(.3, 0, .2, 1); }
-  38% { rotate: 12deg; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  50% { rotate: -6deg; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  60% { rotate: 2deg; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  68%, 100% { rotate: 0deg; }
+@keyframes mSqMove { 0%, 10% { translate: 0 0; animation-timing-function: cubic-bezier(.83, 0, .17, 1); } 52%, 100% { translate: -137.5% 0; } }
+@keyframes mSqSwing { /* 미끄러지는 동안에만 짧게 흔들림 */
+  0%, 18% { rotate: 0deg; animation-timing-function: cubic-bezier(.3, 0, .2, 1); }
+  30% { rotate: 9deg; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
+  41% { rotate: -4deg; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
+  50%, 100% { rotate: 0deg; }
 }
 .m-w.w0 { transform-origin: 27.27% 50%; scale: 0; animation: mW0 var(--t) var(--in) infinite alternate; }
 @keyframes mW0 { 0%, 40% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 66%, 100% { scale: 1; } }
@@ -102,13 +108,18 @@
 @keyframes mW2 { 0%, 52% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 78%, 100% { scale: 1; } }
 .m-w.w3 { transform-origin: 72.73% 50%; scale: 0; animation: mW3 var(--t) var(--in) infinite alternate; }
 @keyframes mW3 { 0%, 58% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 84%, 100% { scale: 1; } }
-/* 심볼 카드 */
-.s-nd { transform-origin: 50% 50%; scale: .16; animation: mSNd var(--t) infinite alternate both; }
+/* 심볼 카드: 없음 → 네모 → 비틀림 → 바늘 → N, 왕복 */
+.s-sq { left: 13.635%; animation: mSSq var(--t) infinite alternate both; }
 .s-n.n1 { transform-origin: 45.455% 0%; scale: 0; animation: mSN1 var(--t) infinite alternate both; }
 .s-n.n2 { transform-origin: 54.545% 100%; scale: 0; animation: mSN2 var(--t) infinite alternate both; }
-@keyframes mSNd { 0%, 10% { scale: .16; rotate: -180deg; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 52%, 100% { scale: 1; rotate: 0deg; } }
-@keyframes mSN1 { 0%, 34% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 78%, 100% { scale: 1; } }
-@keyframes mSN2 { 0%, 42% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 86%, 100% { scale: 1; } }
+@keyframes mSSq {
+  0%, 5% { transform: skewX(0deg) scale(0, 0) rotate(0deg); animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
+  17% { transform: skewX(0deg) scale(.13, .13) rotate(0deg); animation-timing-function: cubic-bezier(.7, 0, .2, 1); }
+  31% { transform: skewX(3deg) scale(.26, .42) rotate(28deg); animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
+  48%, 100% { transform: skewX(7.12deg) scale(.1768, .7071) rotate(45deg); }
+}
+@keyframes mSN1 { 0%, 46% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 74%, 100% { scale: 1; } }
+@keyframes mSN2 { 0%, 52% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 80%, 100% { scale: 1; } }
 .id-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 24px 26px 26px; flex: 1; flex-wrap: wrap; }
 .id-meta > div:first-child { max-width: 560px; }
 .id-meta h3 { font-size: 20px; letter-spacing: -.02em; display: flex; align-items: baseline; gap: 10px; }
@@ -230,6 +241,7 @@ html[data-theme="dark"] .cl em { background: rgba(255,255,255,.9); color: #000; 
 }
 @media (prefers-reduced-motion: reduce) {
   .m3d svg { opacity: 1 !important; translate: none !important; rotate: none !important; scale: none !important; clip-path: none !important; animation: none !important; }
+  .m3d .nd-sq { display: none; }
   .b-trail { display: none; }
 }
 
