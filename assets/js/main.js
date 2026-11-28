@@ -184,7 +184,7 @@
   // 10) Newsroom: data/newsroom.json(GitHub Actions가 블로그 RSS로 갱신)을 읽어 최신 글로 교체.
   //     실패하면 HTML에 들어 있는 글을 그대로 보여줍니다.
   var newsroom = document.querySelector("[data-newsroom]");
-  var CAT = { "인사이트": "Insight", "비하인드 더 씬": "Behind the Scene", "나빅소식": "News" };
+  var CAT = { "인사이트": "Insight", "비하인드 더 씬": "Behind the Scene", "트렌드 톡": "Trend Talk", "나빅소식": "News" };
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function render(list, posts) {
     if (!list || !posts || !posts.length) return;
@@ -205,6 +205,38 @@
         render(newsroom.querySelector('[data-news-list="news"]'), d.news);
       })
       .catch(function () {});
+  }
+
+  // 10-1) 언어 메뉴: 현재 언어 버튼을 누르면 다른 언어가 펼쳐짐 (261128g)
+  document.querySelectorAll(".lang-menu").forEach(function (m) {
+    var cur = m.querySelector(".lang-cur");
+    if (!cur) return;
+    function close() { m.classList.remove("is-open"); cur.setAttribute("aria-expanded", "false"); }
+    cur.addEventListener("click", function (e) { e.stopPropagation(); var on = !m.classList.contains("is-open"); m.classList.toggle("is-open", on); cur.setAttribute("aria-expanded", on ? "true" : "false"); });
+    m.querySelectorAll("[data-set-lang]").forEach(function (b) { b.addEventListener("click", close); });
+    document.addEventListener("click", function (e) { if (!m.contains(e.target)) close(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+  });
+
+  // 10-2) 홈 첫 화면 심볼 모션: 화면에 보일 때만 재생
+  var hmStages = document.querySelectorAll(".hm-stage[data-motion]");
+  if (hmStages.length) {
+    if ("IntersectionObserver" in window) {
+      var hmIo = new IntersectionObserver(function (es) { es.forEach(function (e) { e.target.classList.toggle("is-on", e.isIntersecting); }); }, { threshold: .1 });
+      hmStages.forEach(function (s) { hmIo.observe(s); });
+    } else hmStages.forEach(function (s) { s.classList.add("is-on"); });
+  }
+
+  // 10-3) 전체 펼침 메뉴(데스크톱): 상단 메뉴에 올리면 모든 하위 메뉴가 펼쳐지고, 헤더를 벗어나면 접힘
+  var hdr = document.querySelector(".site-header");
+  if (hdr) {
+    var desk = window.matchMedia("(min-width: 861px)"), megaT;
+    var openMega = function () { if (!desk.matches) return; clearTimeout(megaT); hdr.classList.add("mega-open"); };
+    var closeMega = function () { clearTimeout(megaT); megaT = setTimeout(function () { hdr.classList.remove("mega-open"); }, 120); };
+    hdr.querySelectorAll(".has-sub").forEach(function (b) { b.addEventListener("mouseenter", openMega); b.addEventListener("focusin", openMega); });
+    hdr.addEventListener("mouseleave", closeMega);
+    hdr.addEventListener("focusout", function (e) { if (!hdr.contains(e.relatedTarget)) closeMega(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") hdr.classList.remove("mega-open"); });
   }
 
   // 11) 연도
