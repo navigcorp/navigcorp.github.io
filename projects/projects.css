@@ -61,3 +61,9 @@
 @keyframes pjLive { 50% { opacity: .25; } }
 .pj-camp h3 { margin-top: 22px; }
 @media (prefers-reduced-motion: reduce) { .pj-live i { animation: none; } }
+/* 바로가기 두 버튼 균형: 같은 크기 심볼 + 같은 글자, 같은 너비 */
+.pj-jump a { height: 56px; padding: 0 24px 0 14px; gap: 12px; min-width: 232px; }
+.pj-jump img.pj-um-sym, .pj-jump img.pj-pl-sym { height: 28px; width: 28px; object-fit: contain; }
+.pj-jump img.pj-um-sym { border-radius: 3px; }
+.pj-jump a::after { content: "\2193"; margin-left: auto; padding-left: 12px; font-size: 15px; opacity: .55; transition: transform .25s var(--ease), opacity .25s; }
+.pj-jump a:hover::after { transform: translateY(3px); opacity: 1; }
