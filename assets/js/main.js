@@ -339,7 +339,6 @@
       els.forEach(function (e) { if (e[0].getBoundingClientRect().top <= mid) cur = e; });
       els.forEach(function (e) { e[1].classList.toggle("on", e === cur); });
       var hb = hero.getBoundingClientRect().bottom, dk = hb > innerHeight * .5;
-      document.querySelectorAll(".pj-band").forEach(function (b) { var r = b.getBoundingClientRect(); if (r.top < innerHeight * .5 && r.bottom > innerHeight * .5) dk = true; });
       nav.classList.toggle("on-dark", dk);
     };
     addEventListener("scroll", mark, { passive: true }); mark();
