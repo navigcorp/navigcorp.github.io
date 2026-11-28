@@ -372,7 +372,7 @@
     ["회사 소개", "About NAVIG", "index.html#about", "회사", "나빅 NAVIG 크리에이티브 그룹 회사소개 소개 설립 사업부 about"],
     ["연혁", "History", "index.html#history", "회사", "연혁 히스토리 history 2024 2025 2026"],
     ["글로벌 · 싱가포르", "Global · Singapore", "index.html#global", "회사", "싱가포르 글로벌 해외 파트너 singapore global"],
-    ["프로젝트 움직임 · 파이프라인", "Project Umjigim · Pipeline", "projects/", "프로젝트", "프로젝트 움직임 파이프라인 umjigim pipeline 챌린지 캠페인 알리다 나빅을 알리다 project"],
+    ["프로젝트 움직임 · 파이프라인", "Project Umjigim · Pipeline", "projects/", "프로젝트", "프로젝트 움직임 파이프라인 umjigim pipeline 챌린지 캠페인 project"],
     ["브랜드 리소스", "Brand resources", "brand/", "회사", "브랜드 로고 워드마크 심볼 다운로드 brand logo"],
     ["전체 서비스", "All services", "services/", "서비스", "서비스 service 사업부"],
     ["영상·디자인", "Film & Design", "services/studio/", "서비스", "영상 제작 홍보영상 브랜드 필름 행사 라이브 중계 디자인 로고 포스터 모션그래픽 AI 콘텐츠 스튜디오 studio 포트폴리오"],
