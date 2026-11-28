@@ -433,24 +433,4 @@
     else if (e.key === "Enter" && t === inp) { var a = items[sel >= 0 ? sel : 0]; if (a) { e.preventDefault(); a.click(); } }
   });
 
-  // 4) 홈 하단 떠 있는 검색 말풍선 (카카오 참고): 첫 화면을 지나면 나타나고, 닫으면 이번 방문 동안 숨김
-  if (hero) {
-    var pill = document.createElement("div"); pill.className = "sx-pill";
-    pill.innerHTML = '<div class="sx-pill-tags"></div><div class="sx-pill-bar" role="button" tabindex="0" aria-label="사이트 검색 열기"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg><span><span class="ko">방향을 찾고 계신가요? 무엇이든 검색해 보세요</span><span class="en">Looking for something? Search NAVIG</span></span><button class="sx-pill-x" type="button" aria-label="닫기">&#10005;</button></div>';
-    document.body.appendChild(pill);
-    var pt = pill.querySelector(".sx-pill-tags");
-    TAGS.slice(0, 4).forEach(function (t) { var b = document.createElement("button"); b.type = "button"; b.textContent = "#" + t[0]; b.addEventListener("click", function () { open(t[1]); }); pt.appendChild(b); });
-    var bar = pill.querySelector(".sx-pill-bar");
-    bar.addEventListener("click", function (e) { if (e.target.closest(".sx-pill-x")) { e.stopPropagation(); pill.classList.remove("show"); pill.dataset.off = "1"; try { sessionStorage.setItem("sx-pill-off", "1"); } catch (x) {} return; } open(); });
-    bar.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
-    try { if (sessionStorage.getItem("sx-pill-off")) pill.dataset.off = "1"; } catch (x) {}
-    var contact = document.getElementById("contact");
-    var pillCheck = function () {
-      if (pill.dataset.off) return;
-      var past = hero.getBoundingClientRect().bottom < innerHeight * .6;
-      var nearEnd = contact && contact.getBoundingClientRect().top < innerHeight * .8;
-      pill.classList.toggle("show", past && !nearEnd);
-    };
-    addEventListener("scroll", pillCheck, { passive: true }); pillCheck();
-  }
 })();
