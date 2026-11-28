@@ -64,38 +64,27 @@
 .id-stage.sym { aspect-ratio: 16 / 9; background: var(--panel); color: var(--ink); }
 .wm-motion { width: min(70%, 760px); fill: currentColor; overflow: visible; }
 .sym-motion { width: 34%; fill: currentColor; overflow: visible; }
-/* 로고 루프 모션 v13(11/28) 대표: "옆에서 선이 생기는 건 조잡. 바늘이 다시 회전하며 하나의 선이 보이고, 더 돌면 N 심볼이 자연스럽게 보이도록. 작은 점 하나가 다각도로 보면 NAVIG 심볼이 된다는 것을 표현."
-   - 하나의 물체가 계속 한 방향으로 돈다: 작은 점 → 네모 → (돌며 시점 변화) 바늘 → (더 돌아 옆면이 보이며) 한 줄의 선 → (계속 돌아 정면이 되며) N 심볼.
-   - 바늘 = 약 76° 기울어진 네모의 정면 모습, 선 = 90° 옆면. 선이 된 순간 같은 평면에 있는 N 심볼로 바꿔 끼우고(둘 다 선으로 보여 이음매 없음), N이 같은 방향으로 계속 돌아 정면에 선다.
-   - 회전 속도는 바꿔 끼우는 순간 앞뒤가 같도록 맞췄다(끊김 없음). 끝 상태는 원본 좌표 그대로. 가림·반투명·흐림·옆에서 그어지는 선 없음.
-   - 심볼 카드는 이 과정을 왕복한다(되돌아갈 때 N이 선으로 접히고, 바늘, 네모, 점으로 돌아가 사라졌다 다시 생김).
-   - 시그니처: 처음 한 번 같은 방식으로 N이 생긴다. 이후 N이 원래 자리로 미끄러지는 동안에만 바늘이 짧게 흔들리고, A·V·I·G가 차례로 펼쳐졌다 역순으로 접힌다(왕복).
-   - 화면 밖이면 정지(.is-on), 동작 줄이기 설정이면 완성 로고로 정지. */
+/* 로고 루프 모션 v14(11/28) 대표: "끊는 동작 없이 자연스럽게 흘러가게. 완전히 사라지는 건 없게."
+   - 점 → 네모 → 바늘 → 한 줄의 선 → N 을 회전 각도 하나(0→180°)로 묶고, 그 각도를 처음부터 끝까지 한 개의 부드러운 곡선으로 움직인다.
+     중간에 멈추거나 단계마다 속도가 끊기는 구간이 없다(키프레임을 촘촘히 계산해 넣음, 각 구간 linear).
+   - 바늘 = 약 76°, 선 = 90°(옆면, 같은 평면의 N으로 바꿔 끼우는 지점), N = 180°(정면). 끝 상태는 원본 좌표 그대로.
+   - 심볼 카드는 왕복하되 가장 작을 때도 작은 네모(점)가 남아 완전히 사라지지 않는다.
+   - 시그니처: 처음 한 번 같은 흐름으로 N이 생긴 뒤, N이 원래 자리로 미끄러지는 동안에만 바늘이 짧게 흔들리고, A·V·I·G가 차례로 펼쳐졌다 역순으로 접힌다(왕복).
+   - 가림·반투명·흐림·옆에서 그어지는 선 없음. 화면 밖이면 정지(.is-on), 동작 줄이기 설정이면 완성 로고로 정지. */
 .id-stage { perspective: none; }
-.wm-motion { --t: 3.4s; --in: 4s; aspect-ratio: 350.79 / 85.04; }
-.sym-motion { --t: 4s; aspect-ratio: 116.93 / 85.04; }
+.wm-motion { --t: 3.4s; --in: 3.6s; aspect-ratio: 350.79 / 85.04; }
+.sym-motion { --t: 4.4s; aspect-ratio: 116.93 / 85.04; }
 .m3d { position: relative; }
 .m3d svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: currentColor; overflow: visible; }
-.m-grp, .s-grp { position: absolute; inset: 0; transform-style: flat; backface-visibility: visible; }
+.m-grp, .s-grp { position: absolute; inset: 0; backface-visibility: visible; }
 .m3d svg, .m3d .nd-sq, .m3d .m-grp, .m3d .s-grp { animation-play-state: paused !important; }
 .is-on .m3d svg, .is-on .m3d .nd-sq, .is-on .m3d .m-grp, .is-on .m3d .s-grp { animation-play-state: running !important; }
-.nd-sq { position: absolute; top: 0; height: 100%; aspect-ratio: 1; background: currentColor; transform-origin: 50% 50%; scale: 0; transform: perspective(420px) rotate3d(-0.0822, -0.9946, -0.0638, 0deg) rotateZ(0deg) scale(.713); backface-visibility: visible; }
-/* 공통: 하나의 물체가 도는 동작 */
-@keyframes kSqGrow { 0%, 4% { scale: 0; animation-timing-function: cubic-bezier(.3, 0, .2, 1); } 34%, 100% { scale: 1; } }
-@keyframes kSqTurn {
-  0%, 10% { transform: perspective(420px) rotate3d(-0.0822, -0.9946, -0.0638, 0deg) rotateZ(0deg) scale(.713); animation-timing-function: cubic-bezier(.55, 0, .15, 1); }
-  48%, 54% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 75.95deg) rotateZ(45deg) scale(.713); animation-timing-function: cubic-bezier(.6, 0, .9, .7); }
-  58%, 100% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 90deg) rotateZ(45deg) scale(.713); }
-}
-@keyframes kSqSwap { 0%, 57.99% { opacity: 1; } 58%, 100% { opacity: 0; } }
-@keyframes kGrpTurn {
-  0%, 58% { opacity: 0; transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -90deg); animation-timing-function: cubic-bezier(.15, .45, .3, 1); }
-  58.01% { opacity: 1; }
-  84%, 100% { opacity: 1; transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, 0deg); }
-}
+.nd-sq { position: absolute; top: 0; height: 100%; aspect-ratio: 1; background: currentColor; transform-origin: 50% 50%; backface-visibility: visible; }
+.m3d .nd-sq, .m3d .m-grp, .m3d .s-grp { animation-timing-function: linear; }
 /* 시그니처 */
-.m-sq { left: 37.879%; animation: kSqGrow var(--in) both, kSqTurn var(--in) both, kSqSwap var(--in) both; }
-.m-grp { transform-origin: 16.667% 50%; translate: 33.333% 0; opacity: 0; transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -90deg); animation: kGrpTurn var(--in) both, mN var(--t) var(--in) infinite alternate; }
+.m-sq { left: 37.879%; scale: 0; animation: kWSqTurn var(--in) linear both, kWSqGrow var(--in) linear both, kWSqSwap var(--in) linear both, kWIn var(--in) both; }
+@keyframes kWIn { 0% { opacity: 0; } 3% { opacity: 1; } }
+.m-grp { transform-origin: 16.667% 50%; translate: 33.333% 0; opacity: 0; animation: kWGrpTurn var(--in) linear both, kWGrpSwap var(--in) linear both, mN var(--t) var(--in) infinite alternate; }
 .m-nd { transform-origin: 16.667% 50%; animation: mNdSwing var(--t) var(--in) infinite alternate; }
 @keyframes mN { 0%, 10% { translate: 33.333% 0; animation-timing-function: cubic-bezier(.83, 0, .17, 1); } 52%, 100% { translate: 0 0; } }
 @keyframes mNdSwing { /* 미끄러지는 동안에만 짧게 흔들림 */
@@ -112,9 +101,169 @@
 @keyframes mW2 { 0%, 52% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 78%, 100% { scale: 1; } }
 .m-w.w3 { transform-origin: 72.73% 50%; scale: 0; animation: mW3 var(--t) var(--in) infinite alternate; }
 @keyframes mW3 { 0%, 58% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 84%, 100% { scale: 1; } }
-/* 심볼 카드: 같은 동작을 왕복 */
-.s-sq { left: 13.635%; animation: kSqGrow var(--t) infinite alternate both, kSqTurn var(--t) infinite alternate both, kSqSwap var(--t) infinite alternate both; }
-.s-grp { transform-origin: 50% 50%; opacity: 0; transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -90deg); animation: kGrpTurn var(--t) infinite alternate both; }
+/* 심볼 카드: 같은 흐름을 왕복(사라지지 않음) */
+.s-sq { left: 13.635%; animation: kSSqTurn var(--t) linear infinite alternate both, kSSqGrow var(--t) linear infinite alternate both, kSSqSwap var(--t) linear infinite alternate both; }
+.s-grp { transform-origin: 50% 50%; opacity: 0; animation: kSGrpTurn var(--t) linear infinite alternate both, kSGrpSwap var(--t) linear infinite alternate both; }
+@keyframes kSSqTurn {
+  0.00% { transform: perspective(420px) rotate3d(-0.0822, -0.9946, -0.0638, 0.00deg) rotateZ(0.00deg) scale(.713); }
+  0.00% { transform: perspective(420px) rotate3d(-0.0822, -0.9946, -0.0638, 0.00deg) rotateZ(0.00deg) scale(.713); }
+  2.25% { transform: perspective(421px) rotate3d(-0.0822, -0.9946, -0.0638, 1.54deg) rotateZ(0.05deg) scale(.713); }
+  4.50% { transform: perspective(423px) rotate3d(-0.0822, -0.9946, -0.0638, 3.48deg) rotateZ(0.27deg) scale(.713); }
+  6.75% { transform: perspective(427px) rotate3d(-0.0822, -0.9946, -0.0638, 5.79deg) rotateZ(0.74deg) scale(.713); }
+  9.00% { transform: perspective(435px) rotate3d(-0.0822, -0.9946, -0.0638, 8.48deg) rotateZ(1.56deg) scale(.713); }
+  11.25% { transform: perspective(448px) rotate3d(-0.0822, -0.9946, -0.0638, 11.55deg) rotateZ(2.80deg) scale(.713); }
+  13.50% { transform: perspective(467px) rotate3d(-0.0822, -0.9946, -0.0638, 14.97deg) rotateZ(4.55deg) scale(.713); }
+  15.75% { transform: perspective(495px) rotate3d(-0.0822, -0.9946, -0.0638, 18.73deg) rotateZ(6.85deg) scale(.713); }
+  18.00% { transform: perspective(535px) rotate3d(-0.0822, -0.9946, -0.0638, 22.83deg) rotateZ(9.74deg) scale(.713); }
+  20.25% { transform: perspective(593px) rotate3d(-0.0822, -0.9946, -0.0638, 27.24deg) rotateZ(13.20deg) scale(.713); }
+  22.50% { transform: perspective(676px) rotate3d(-0.0822, -0.9946, -0.0638, 31.95deg) rotateZ(17.17deg) scale(.713); }
+  24.75% { transform: perspective(801px) rotate3d(-0.0822, -0.9946, -0.0638, 36.93deg) rotateZ(21.55deg) scale(.713); }
+  27.00% { transform: perspective(995px) rotate3d(-0.0822, -0.9946, -0.0638, 42.17deg) rotateZ(26.19deg) scale(.713); }
+  29.25% { transform: perspective(1318px) rotate3d(-0.0822, -0.9946, -0.0638, 47.63deg) rotateZ(30.87deg) scale(.713); }
+  31.50% { transform: perspective(1910px) rotate3d(-0.0822, -0.9946, -0.0638, 53.30deg) rotateZ(35.35deg) scale(.713); }
+  33.75% { transform: perspective(3184px) rotate3d(-0.0822, -0.9946, -0.0638, 59.14deg) rotateZ(39.34deg) scale(.713); }
+  36.00% { transform: perspective(6762px) rotate3d(-0.0822, -0.9946, -0.0638, 65.13deg) rotateZ(42.50deg) scale(.713); }
+  38.25% { transform: perspective(23097px) rotate3d(-0.0822, -0.9946, -0.0638, 71.24deg) rotateZ(44.49deg) scale(.713); }
+  40.50% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 77.44deg) rotateZ(45.00deg) scale(.713); }
+  42.75% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 83.71deg) rotateZ(45.00deg) scale(.713); }
+  45.00% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 90.00deg) rotateZ(45.00deg) scale(.713); }
+  45.00% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 90.00deg) rotateZ(45.00deg) scale(.713); }
+  100.00% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 90.00deg) rotateZ(45.00deg) scale(.713); }
+}
+@keyframes kSSqGrow {
+  0.00% { scale: 0.120; }
+  0.00% { scale: 0.120; }
+  2.25% { scale: 0.122; }
+  4.50% { scale: 0.128; }
+  6.75% { scale: 0.142; }
+  9.00% { scale: 0.165; }
+  11.25% { scale: 0.200; }
+  13.50% { scale: 0.249; }
+  15.75% { scale: 0.312; }
+  18.00% { scale: 0.390; }
+  20.25% { scale: 0.480; }
+  22.50% { scale: 0.580; }
+  24.75% { scale: 0.685; }
+  27.00% { scale: 0.788; }
+  29.25% { scale: 0.880; }
+  31.50% { scale: 0.953; }
+  33.75% { scale: 0.995; }
+  36.00% { scale: 1.000; }
+  38.25% { scale: 1.000; }
+  40.50% { scale: 1.000; }
+  42.75% { scale: 1.000; }
+  45.00% { scale: 1.000; }
+  45.00% { scale: 1.000; }
+  100.00% { scale: 1.000; }
+}
+@keyframes kSGrpTurn {
+  0.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -90.00deg); }
+  45.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -90.00deg); }
+  45.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -90.00deg); }
+  47.25% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -83.71deg); }
+  49.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -77.44deg); }
+  51.75% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -71.24deg); }
+  54.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -65.13deg); }
+  56.25% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -59.14deg); }
+  58.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -53.30deg); }
+  60.75% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -47.63deg); }
+  63.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -42.17deg); }
+  65.25% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -36.93deg); }
+  67.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -31.95deg); }
+  69.75% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -27.24deg); }
+  72.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -22.83deg); }
+  74.25% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -18.73deg); }
+  76.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -14.97deg); }
+  78.75% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -11.55deg); }
+  81.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -8.48deg); }
+  83.25% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -5.79deg); }
+  85.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -3.48deg); }
+  87.75% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -1.54deg); }
+  90.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, 0.00deg); }
+  100.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, 0.00deg); }
+}
+@keyframes kSSqSwap { 0%, 44.99% { opacity: 1; } 45.00%, 100% { opacity: 0; } }
+@keyframes kSGrpSwap { 0%, 44.99% { opacity: 0; } 45.00%, 100% { opacity: 1; } }
+@keyframes kWSqTurn {
+  0.00% { transform: perspective(420px) rotate3d(-0.0822, -0.9946, -0.0638, 0.00deg) rotateZ(0.00deg) scale(.713); }
+  0.00% { transform: perspective(420px) rotate3d(-0.0822, -0.9946, -0.0638, 0.00deg) rotateZ(0.00deg) scale(.713); }
+  2.50% { transform: perspective(421px) rotate3d(-0.0822, -0.9946, -0.0638, 1.54deg) rotateZ(0.05deg) scale(.713); }
+  5.00% { transform: perspective(423px) rotate3d(-0.0822, -0.9946, -0.0638, 3.48deg) rotateZ(0.27deg) scale(.713); }
+  7.50% { transform: perspective(427px) rotate3d(-0.0822, -0.9946, -0.0638, 5.79deg) rotateZ(0.74deg) scale(.713); }
+  10.00% { transform: perspective(435px) rotate3d(-0.0822, -0.9946, -0.0638, 8.48deg) rotateZ(1.56deg) scale(.713); }
+  12.50% { transform: perspective(448px) rotate3d(-0.0822, -0.9946, -0.0638, 11.55deg) rotateZ(2.80deg) scale(.713); }
+  15.00% { transform: perspective(467px) rotate3d(-0.0822, -0.9946, -0.0638, 14.97deg) rotateZ(4.55deg) scale(.713); }
+  17.50% { transform: perspective(495px) rotate3d(-0.0822, -0.9946, -0.0638, 18.73deg) rotateZ(6.85deg) scale(.713); }
+  20.00% { transform: perspective(535px) rotate3d(-0.0822, -0.9946, -0.0638, 22.83deg) rotateZ(9.74deg) scale(.713); }
+  22.50% { transform: perspective(593px) rotate3d(-0.0822, -0.9946, -0.0638, 27.24deg) rotateZ(13.20deg) scale(.713); }
+  25.00% { transform: perspective(676px) rotate3d(-0.0822, -0.9946, -0.0638, 31.95deg) rotateZ(17.17deg) scale(.713); }
+  27.50% { transform: perspective(801px) rotate3d(-0.0822, -0.9946, -0.0638, 36.93deg) rotateZ(21.55deg) scale(.713); }
+  30.00% { transform: perspective(995px) rotate3d(-0.0822, -0.9946, -0.0638, 42.17deg) rotateZ(26.19deg) scale(.713); }
+  32.50% { transform: perspective(1318px) rotate3d(-0.0822, -0.9946, -0.0638, 47.63deg) rotateZ(30.87deg) scale(.713); }
+  35.00% { transform: perspective(1910px) rotate3d(-0.0822, -0.9946, -0.0638, 53.30deg) rotateZ(35.35deg) scale(.713); }
+  37.50% { transform: perspective(3184px) rotate3d(-0.0822, -0.9946, -0.0638, 59.14deg) rotateZ(39.34deg) scale(.713); }
+  40.00% { transform: perspective(6762px) rotate3d(-0.0822, -0.9946, -0.0638, 65.13deg) rotateZ(42.50deg) scale(.713); }
+  42.50% { transform: perspective(23097px) rotate3d(-0.0822, -0.9946, -0.0638, 71.24deg) rotateZ(44.49deg) scale(.713); }
+  45.00% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 77.44deg) rotateZ(45.00deg) scale(.713); }
+  47.50% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 83.71deg) rotateZ(45.00deg) scale(.713); }
+  50.00% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 90.00deg) rotateZ(45.00deg) scale(.713); }
+  50.00% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 90.00deg) rotateZ(45.00deg) scale(.713); }
+  100.00% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 90.00deg) rotateZ(45.00deg) scale(.713); }
+}
+@keyframes kWSqGrow {
+  0.00% { scale: 0.120; }
+  0.00% { scale: 0.120; }
+  2.50% { scale: 0.122; }
+  5.00% { scale: 0.128; }
+  7.50% { scale: 0.142; }
+  10.00% { scale: 0.165; }
+  12.50% { scale: 0.200; }
+  15.00% { scale: 0.249; }
+  17.50% { scale: 0.312; }
+  20.00% { scale: 0.390; }
+  22.50% { scale: 0.480; }
+  25.00% { scale: 0.580; }
+  27.50% { scale: 0.685; }
+  30.00% { scale: 0.788; }
+  32.50% { scale: 0.880; }
+  35.00% { scale: 0.953; }
+  37.50% { scale: 0.995; }
+  40.00% { scale: 1.000; }
+  42.50% { scale: 1.000; }
+  45.00% { scale: 1.000; }
+  47.50% { scale: 1.000; }
+  50.00% { scale: 1.000; }
+  50.00% { scale: 1.000; }
+  100.00% { scale: 1.000; }
+}
+@keyframes kWGrpTurn {
+  0.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -90.00deg); }
+  50.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -90.00deg); }
+  50.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -90.00deg); }
+  52.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -83.71deg); }
+  55.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -77.44deg); }
+  57.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -71.24deg); }
+  60.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -65.13deg); }
+  62.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -59.14deg); }
+  65.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -53.30deg); }
+  67.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -47.63deg); }
+  70.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -42.17deg); }
+  72.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -36.93deg); }
+  75.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -31.95deg); }
+  77.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -27.24deg); }
+  80.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -22.83deg); }
+  82.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -18.73deg); }
+  85.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -14.97deg); }
+  87.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -11.55deg); }
+  90.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -8.48deg); }
+  92.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -5.79deg); }
+  95.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -3.48deg); }
+  97.50% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, -1.54deg); }
+  100.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, 0.00deg); }
+  100.00% { transform: perspective(700px) rotate3d(-0.0822, -0.9946, -0.0638, 0.00deg); }
+}
+@keyframes kWSqSwap { 0%, 49.99% { opacity: 1; } 50.00%, 100% { opacity: 0; } }
+@keyframes kWGrpSwap { 0%, 49.99% { opacity: 0; } 50.00%, 100% { opacity: 1; } }
 .id-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 24px 26px 26px; flex: 1; flex-wrap: wrap; }
 .id-meta > div:first-child { max-width: 560px; }
 .id-meta h3 { font-size: 20px; letter-spacing: -.02em; display: flex; align-items: baseline; gap: 10px; }
