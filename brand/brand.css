@@ -64,25 +64,23 @@
 .id-stage.sym { aspect-ratio: 16 / 9; background: var(--panel); color: var(--ink); }
 .wm-motion { width: min(70%, 760px); fill: currentColor; overflow: visible; }
 .sym-motion { width: 34%; fill: currentColor; overflow: visible; }
-/* 로고 루프 모션 v16(11/28) 대표: "너무 플랫하다. 토스 브랜드 리소스처럼 입체감은 주되, 블랙이라 조명이 닿는 게 촌스럽지 않게, 그라데이션 느낌 없이 실제 조명에 의한 공간감."
-   - 그라데이션·빛줄기·광택 없음. 실제 물체처럼 "면 단위" 조명만 쓴다.
-     1) 두께: N 심볼은 얇은 판이 아니라 두께가 있는 판이다(같은 모양을 뒤로 10겹 쌓아 옆면을 만든 것). 기울 때만 옆면이 보이고, 정면이면 원본 그대로.
-     2) 면 밝기: 고정된 정면 위쪽 조명을 기준으로, 판이 기울수록 앞면이 살짝 어두워지고(최대 약 17%), 옆면은 늘 앞면보다 어둡다. 한 면 안에서는 색이 한 가지(단색 면)라 그라데이션처럼 보이지 않는다.
-   - 흐름: 점 → 네모(얇은 판, 돌며 빛을 받아 밝기가 변함) → 바늘 → 바늘이 나침반처럼 한 바퀴 돌며 N이 펼쳐지는 동안 N 판이 뒤로 살짝 기울어 두께와 그늘이 드러났다가, 정북에 멈추며 정면으로 선다.
+/* 로고 루프 모션 v17(11/28) 대표: "미세한 흔들림은 어색. 조명은 그림자 지는 게 아님. 배경과 심볼 사이가 아니라 도형 자체에 공간감. 바늘이 도는 느낌은 좋다."
+   - 흔들림 제거: 회전 끝의 넘침(오버슈트)과 시그니처 바늘 흔들림을 없애고, 한 번의 부드러운 감속으로 정북에 멈춘다.
+   - 두께(옆면)·그림자 제거. 대신 N을 이루는 세 면이 회전하는 동안 각자 다른 깊이와 각도에 놓인다.
+     바늘은 판들보다 살짝 앞으로 떠 있고, 두 사선 면은 자기 사선 축을 따라 서로 반대로 접혀 있다가(접힌 리본처럼), 정북에 닿으며 한 평면으로 펴진다.
+     원근 속에서 세 면이 서로 어긋나 보이는 시차와, 면마다 다른 한 가지 밝기(면 단위, 그라데이션 아님)로 도형 자체의 입체감을 만든다.
    - 끝 상태는 원본 좌표·원본 색. 심볼 카드는 왕복(점은 남음), 시그니처는 처음 한 번 같은 흐름 후 글자 펼침 왕복.
    - 화면 밖이면 정지(.is-on), 동작 줄이기 설정이면 완성 로고로 정지. */
 @property --k { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --kp { syntax: "<number>"; inherits: false; initial-value: 0; }
 .id-stage { perspective: none; --bgc: #000; }
 .id-stage.sym { --bgc: var(--panel); }
-.wm-motion { --t: 3.4s; --in: 4s; --d: .8px; aspect-ratio: 350.79 / 85.04; }
-.sym-motion { --t: 4.6s; --d: 1.1px; aspect-ratio: 116.93 / 85.04; }
+.wm-motion { --t: 3.4s; --in: 4s; --zf: 9px; aspect-ratio: 350.79 / 85.04; }
+.sym-motion { --t: 4.6s; --zf: 14px; aspect-ratio: 116.93 / 85.04; }
 .m3d { position: relative; }
 .m3d svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: currentColor; overflow: visible; }
-.m-grp, .s-grp { position: absolute; inset: 0; transform-style: preserve-3d; }
-.lyr { position: absolute; inset: 0; transform: translateZ(calc(var(--z) * var(--d) * -1)); }
-.lyr svg { fill: color-mix(in srgb, currentColor 22%, var(--bgc)); }
-.lyr.front { transform: none; }
-.lyr.front svg { fill: color-mix(in srgb, currentColor calc(100% - var(--k) * 100%), var(--bgc)); }
+.m-grp, .s-grp, .lyr.front { position: absolute; inset: 0; transform-style: preserve-3d; }
+.lyr.front svg { fill: color-mix(in srgb, currentColor calc(100% - (var(--k) + var(--kp)) * 100%), var(--bgc)); }
 .m3d svg, .m3d .nd-sq, .m3d .m-grp, .m3d .s-grp { animation-play-state: paused !important; }
 .is-on .m3d svg, .is-on .m3d .nd-sq, .is-on .m3d .m-grp, .is-on .m3d .s-grp { animation-play-state: running !important; }
 .nd-sq { position: absolute; top: 0; height: 100%; aspect-ratio: 1; transform-origin: 50% 50%; scale: .12; transform: perspective(420px) rotate3d(-0.0822, -0.9946, -0.0638, 0deg) rotateZ(0deg) scale(.713); }
@@ -90,17 +88,8 @@
 /* 공통 동작 */
 @keyframes kGrow { 0% { scale: .12; animation-timing-function: cubic-bezier(.3, 0, .2, 1); } 30%, 100% { scale: 1; } }
 @keyframes kTwist { 0% { transform: perspective(420px) rotate3d(-0.0822, -0.9946, -0.0638, 0deg) rotateZ(0deg) scale(.713); animation-timing-function: cubic-bezier(.45, 0, .25, 1); } 40%, 100% { transform: perspective(60000px) rotate3d(-0.0822, -0.9946, -0.0638, 75.95deg) rotateZ(45deg) scale(.713); } }
-@keyframes kLitA { /* 네모가 돌며 조명을 받는 각도가 바뀜(면 전체가 한 밝기) */
-  0% { --k: 0; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  22% { --k: .2; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  40%, 100% { --k: 0; }
-}
-@keyframes kSpin {
-  0%, 20% { rotate: -360deg; animation-timing-function: cubic-bezier(.42, 0, .22, 1); }
-  70% { rotate: 8deg; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  80% { rotate: -3deg; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  88%, 100% { rotate: 0deg; }
-}
+@keyframes kLitA { 0% { --k: 0; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 22% { --k: .16; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 40%, 100% { --k: 0; } }
+@keyframes kSpin { 0%, 20% { rotate: -360deg; animation-timing-function: cubic-bezier(.42, 0, .22, 1); } 86%, 100% { rotate: 0deg; } }
 @keyframes kGrp {
   0.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-360.00deg); --k: 0.000; }
   2.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-360.00deg); --k: 0.000; }
@@ -113,39 +102,39 @@
   16.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-360.00deg); --k: 0.000; }
   18.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-360.00deg); --k: 0.000; }
   20.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-360.00deg); --k: 0.000; }
-  22.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-358.80deg); --k: 0.000; }
-  24.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-354.79deg); --k: 0.000; }
-  26.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-347.19deg); --k: 0.000; }
-  28.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-334.95deg); --k: 0.000; }
-  30.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-316.73deg); --k: 0.000; }
-  32.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-291.16deg); --k: 0.000; }
-  34.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-257.92deg); --k: 0.000; }
-  36.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-219.42deg); --k: 0.000; }
-  38.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-180.63deg); --k: 0.000; }
-  40.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-145.68deg); --k: 0.000; }
-  42.0% { transform: perspective(900px) rotateX(0.56deg) rotateY(-0.42deg) rotateZ(-116.03deg); --k: 0.004; }
-  44.0% { transform: perspective(900px) rotateX(2.09deg) rotateY(-1.57deg) rotateZ(-91.46deg); --k: 0.014; }
-  46.0% { transform: perspective(900px) rotateX(4.38deg) rotateY(-3.29deg) rotateZ(-71.21deg); --k: 0.030; }
-  48.0% { transform: perspective(900px) rotateX(7.21deg) rotateY(-5.41deg) rotateZ(-54.53deg); --k: 0.050; }
-  50.0% { transform: perspective(900px) rotateX(10.37deg) rotateY(-7.78deg) rotateZ(-40.78deg); --k: 0.072; }
-  52.0% { transform: perspective(900px) rotateX(13.63deg) rotateY(-10.22deg) rotateZ(-29.44deg); --k: 0.094; }
-  54.0% { transform: perspective(900px) rotateX(16.79deg) rotateY(-12.59deg) rotateZ(-20.14deg); --k: 0.116; }
-  56.0% { transform: perspective(900px) rotateX(19.62deg) rotateY(-14.71deg) rotateZ(-12.56deg); --k: 0.135; }
-  58.0% { transform: perspective(900px) rotateX(21.91deg) rotateY(-16.43deg) rotateZ(-6.46deg); --k: 0.151; }
-  60.0% { transform: perspective(900px) rotateX(23.44deg) rotateY(-17.58deg) rotateZ(-1.63deg); --k: 0.161; }
-  62.0% { transform: perspective(900px) rotateX(24.00deg) rotateY(-18.00deg) rotateZ(2.07deg); --k: 0.165; }
-  64.0% { transform: perspective(900px) rotateX(23.53deg) rotateY(-17.65deg) rotateZ(4.79deg); --k: 0.162; }
-  66.0% { transform: perspective(900px) rotateX(22.22deg) rotateY(-16.67deg) rotateZ(6.62deg); --k: 0.153; }
-  68.0% { transform: perspective(900px) rotateX(20.25deg) rotateY(-15.19deg) rotateZ(7.67deg); --k: 0.139; }
-  70.0% { transform: perspective(900px) rotateX(17.78deg) rotateY(-13.33deg) rotateZ(8.00deg); --k: 0.122; }
-  72.0% { transform: perspective(900px) rotateX(14.97deg) rotateY(-11.23deg) rotateZ(7.18deg); --k: 0.103; }
-  74.0% { transform: perspective(900px) rotateX(12.00deg) rotateY(-9.00deg) rotateZ(4.44deg); --k: 0.083; }
-  76.0% { transform: perspective(900px) rotateX(9.03deg) rotateY(-6.77deg) rotateZ(0.56deg); --k: 0.062; }
-  78.0% { transform: perspective(900px) rotateX(6.22deg) rotateY(-4.67deg) rotateZ(-2.18deg); --k: 0.043; }
-  80.0% { transform: perspective(900px) rotateX(3.75deg) rotateY(-2.81deg) rotateZ(-3.00deg); --k: 0.026; }
-  82.0% { transform: perspective(900px) rotateX(1.78deg) rotateY(-1.33deg) rotateZ(-2.64deg); --k: 0.012; }
-  84.0% { transform: perspective(900px) rotateX(0.47deg) rotateY(-0.35deg) rotateZ(-1.50deg); --k: 0.003; }
-  86.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-0.36deg); --k: 0.000; }
+  22.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-359.34deg); --k: 0.000; }
+  24.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-357.19deg); --k: 0.000; }
+  26.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-353.26deg); --k: 0.000; }
+  28.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-347.18deg); --k: 0.000; }
+  30.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-338.48deg); --k: 0.000; }
+  32.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-326.59deg); --k: 0.000; }
+  34.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-310.90deg); --k: 0.000; }
+  36.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-290.90deg); --k: 0.000; }
+  38.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-266.55deg); --k: 0.000; }
+  40.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(-238.80deg); --k: 0.000; }
+  42.0% { transform: perspective(900px) rotateX(0.51deg) rotateY(-0.37deg) rotateZ(-209.61deg); --k: 0.003; }
+  44.0% { transform: perspective(900px) rotateX(1.92deg) rotateY(-1.39deg) rotateZ(-181.23deg); --k: 0.010; }
+  46.0% { transform: perspective(900px) rotateX(4.02deg) rotateY(-2.92deg) rotateZ(-155.20deg); --k: 0.022; }
+  48.0% { transform: perspective(900px) rotateX(6.61deg) rotateY(-4.81deg) rotateZ(-132.14deg); --k: 0.036; }
+  50.0% { transform: perspective(900px) rotateX(9.50deg) rotateY(-6.91deg) rotateZ(-112.06deg); --k: 0.052; }
+  52.0% { transform: perspective(900px) rotateX(12.50deg) rotateY(-9.09deg) rotateZ(-94.69deg); --k: 0.068; }
+  54.0% { transform: perspective(900px) rotateX(15.39deg) rotateY(-11.19deg) rotateZ(-79.69deg); --k: 0.084; }
+  56.0% { transform: perspective(900px) rotateX(17.98deg) rotateY(-13.08deg) rotateZ(-66.74deg); --k: 0.098; }
+  58.0% { transform: perspective(900px) rotateX(20.08deg) rotateY(-14.61deg) rotateZ(-55.56deg); --k: 0.110; }
+  60.0% { transform: perspective(900px) rotateX(21.49deg) rotateY(-15.63deg) rotateZ(-45.89deg); --k: 0.117; }
+  62.0% { transform: perspective(900px) rotateX(22.00deg) rotateY(-16.00deg) rotateZ(-37.55deg); --k: 0.120; }
+  64.0% { transform: perspective(900px) rotateX(21.57deg) rotateY(-15.69deg) rotateZ(-30.36deg); --k: 0.118; }
+  66.0% { transform: perspective(900px) rotateX(20.37deg) rotateY(-14.81deg) rotateZ(-24.20deg); --k: 0.111; }
+  68.0% { transform: perspective(900px) rotateX(18.56deg) rotateY(-13.50deg) rotateZ(-18.93deg); --k: 0.101; }
+  70.0% { transform: perspective(900px) rotateX(16.30deg) rotateY(-11.85deg) rotateZ(-14.47deg); --k: 0.089; }
+  72.0% { transform: perspective(900px) rotateX(13.72deg) rotateY(-9.98deg) rotateZ(-10.73deg); --k: 0.075; }
+  74.0% { transform: perspective(900px) rotateX(11.00deg) rotateY(-8.00deg) rotateZ(-7.65deg); --k: 0.060; }
+  76.0% { transform: perspective(900px) rotateX(8.28deg) rotateY(-6.02deg) rotateZ(-5.16deg); --k: 0.045; }
+  78.0% { transform: perspective(900px) rotateX(5.70deg) rotateY(-4.15deg) rotateZ(-3.21deg); --k: 0.031; }
+  80.0% { transform: perspective(900px) rotateX(3.44deg) rotateY(-2.50deg) rotateZ(-1.76deg); --k: 0.019; }
+  82.0% { transform: perspective(900px) rotateX(1.63deg) rotateY(-1.19deg) rotateZ(-0.76deg); --k: 0.009; }
+  84.0% { transform: perspective(900px) rotateX(0.43deg) rotateY(-0.31deg) rotateZ(-0.19deg); --k: 0.002; }
+  86.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(0.00deg); --k: 0.000; }
   88.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(0.00deg); --k: 0.000; }
   90.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(0.00deg); --k: 0.000; }
   92.0% { transform: perspective(900px) rotateX(0.00deg) rotateY(0.00deg) rotateZ(0.00deg); --k: 0.000; }
@@ -157,18 +146,18 @@
 @keyframes kSwapA { 0%, 39.99% { visibility: visible; } 40%, 100% { visibility: hidden; } }
 @keyframes kSwapB { 0%, 39.99% { visibility: hidden; } 40%, 100% { visibility: visible; } }
 @keyframes kOpen { 0%, 42% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 78%, 100% { scale: 1; } }
+/* 면마다 다른 깊이·각도(도형 자체의 공간감), 정북에서 한 평면으로 */
+@keyframes kF1 { 0%, 42% { translate: 0 0 calc(var(--zf) * -1); rotate: .351 -.936 0 30deg; --kp: .16; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 86%, 100% { translate: 0 0 0; rotate: .351 -.936 0 0deg; --kp: 0; } }
+@keyframes kF2 { 0%, 42% { translate: 0 0 calc(var(--zf) * -1); rotate: .351 -.936 0 -30deg; --kp: .04; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 86%, 100% { translate: 0 0 0; rotate: .351 -.936 0 0deg; --kp: 0; } }
+@keyframes kFn { 0%, 40% { translate: 0 0 0; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 60% { translate: 0 0 var(--zf); animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 86%, 100% { translate: 0 0 0; } }
 /* 시그니처: 처음 한 번 */
 .m-sq { left: 37.879%; animation: kGrow var(--in) both, kTwist var(--in) both, kSpin var(--in) both, kLitA var(--in) both, kSwapA var(--in) both; }
 .m-grp { transform-origin: 16.667% 50%; translate: 33.333% 0; visibility: hidden; animation: kGrp var(--in) linear both, kSwapB var(--in) both, mN var(--t) var(--in) infinite alternate; }
-.m-n { transform-origin: 16.667% 50%; scale: 0; animation: kOpen var(--in) both; }
-.m-nd { transform-origin: 16.667% 50%; animation: mNdSwing var(--t) var(--in) infinite alternate; }
+.m-n { transform-origin: 16.667% 50%; scale: 0; }
+.m-n.n1 { animation: kOpen var(--in) both, kF1 var(--in) both; }
+.m-n.n2 { animation: kOpen var(--in) both, kF2 var(--in) both; }
+.m-nd { animation: kFn var(--in) both; }
 @keyframes mN { 0%, 10% { translate: 33.333% 0; animation-timing-function: cubic-bezier(.83, 0, .17, 1); } 52%, 100% { translate: 0 0; } }
-@keyframes mNdSwing {
-  0%, 18% { rotate: 0deg; animation-timing-function: cubic-bezier(.3, 0, .2, 1); }
-  30% { rotate: 9deg; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  41% { rotate: -4deg; animation-timing-function: cubic-bezier(.45, 0, .55, 1); }
-  50%, 100% { rotate: 0deg; }
-}
 .m-w.w0 { transform-origin: 27.27% 50%; scale: 0; animation: mW0 var(--t) var(--in) infinite alternate; }
 @keyframes mW0 { 0%, 40% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 66%, 100% { scale: 1; } }
 .m-w.w1 { transform-origin: 45.45% 50%; scale: 0; animation: mW1 var(--t) var(--in) infinite alternate; }
@@ -180,7 +169,10 @@
 /* 심볼 카드: 같은 흐름을 왕복(점은 남음) */
 .s-sq { left: 13.635%; animation: kGrow var(--t) infinite alternate both, kTwist var(--t) infinite alternate both, kSpin var(--t) infinite alternate both, kLitA var(--t) infinite alternate both, kSwapA var(--t) infinite alternate both; }
 .s-grp { transform-origin: 50% 50%; visibility: hidden; animation: kGrp var(--t) linear infinite alternate both, kSwapB var(--t) infinite alternate both; }
-.s-n { transform-origin: 50% 50%; scale: 0; animation: kOpen var(--t) infinite alternate both; }
+.s-n { transform-origin: 50% 50%; scale: 0; }
+.s-n.n1 { animation: kOpen var(--t) infinite alternate both, kF1 var(--t) infinite alternate both; }
+.s-n.n2 { animation: kOpen var(--t) infinite alternate both, kF2 var(--t) infinite alternate both; }
+.s-nd { animation: kFn var(--t) infinite alternate both; }
 .id-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 24px 26px 26px; flex: 1; flex-wrap: wrap; }
 .id-meta > div:first-child { max-width: 560px; }
 .id-meta h3 { font-size: 20px; letter-spacing: -.02em; display: flex; align-items: baseline; gap: 10px; }
@@ -302,7 +294,6 @@ html[data-theme="dark"] .cl em { background: rgba(255,255,255,.9); color: #000; 
 }
 @media (prefers-reduced-motion: reduce) {
   .m3d svg, .m3d .m-grp, .m3d .s-grp { opacity: 1 !important; visibility: visible !important; translate: none !important; rotate: none !important; scale: none !important; transform: none !important; clip-path: none !important; animation: none !important; }
-  .m3d .lyr:not(.front) { display: none; }
   .m3d .lyr.front svg { fill: currentColor; }
   .m3d .nd-sq { display: none; }
   .b-trail { display: none; }
