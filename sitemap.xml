@@ -12,4 +12,10 @@
   <url><loc>https://navigcorp.com/partnership/</loc><lastmod>2026-11-28</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
   <url><loc>https://navigcorp.com/ethics/</loc><lastmod>2026-11-28</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
   <url><loc>https://navigcorp.com/privacy/</loc><lastmod>2026-11-28</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url>
+    <loc>https://navigcorp.com/projects/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
