@@ -1,0 +1,33 @@
+# Newsroom 자동 갱신 (설계안, 아직 GitHub에 올리지 않음)
+# 3시간마다 네이버 블로그 RSS를 읽어 data/newsroom.json을 갱신하고, 바뀐 경우에만 커밋합니다.
+# 커밋이 생기면 기존 GitHub Pages 배포가 그대로 다시 돌아 사이트에 반영됩니다.
+name: Newsroom sync
+
+on:
+  schedule:
+    - cron: "0 */3 * * *"   # UTC 기준 3시간마다
+  workflow_dispatch: {}      # 블로그 발행 직후 수동 실행도 가능
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Fetch RSS -> data/newsroom.json
+        run: node scripts/fetch-newsroom.mjs
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- data/newsroom.json; then
+            echo "변경 없음"; exit 0
+          fi
+          git config user.name "navig-newsroom-bot"
+          git config user.email "contact@navigcorp.com"
+          git add data/newsroom.json
+          git commit -m "newsroom: 블로그 새 글 반영"
+          git push
