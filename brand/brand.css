@@ -64,7 +64,8 @@
 .id-stage.sym { aspect-ratio: 16 / 9; background: var(--panel); color: var(--ink); }
 .wm-motion { width: min(70%, 760px); fill: currentColor; overflow: visible; }
 .sym-motion { width: 34%; fill: currentColor; overflow: visible; }
-/* 로고 루프 모션 v17(11/28) 대표: "미세한 흔들림은 어색. 조명은 그림자 지는 게 아님. 배경과 심볼 사이가 아니라 도형 자체에 공간감. 바늘이 도는 느낌은 좋다."
+/* 로고 루프 모션 v18(11/28): 대표 "양옆 선이 바늘 안에서 나와서 된 것처럼, 은은한 조명은 유지" → 두 사선 면이 바늘 뒤(안쪽)에서 작게 시작해 각자 자리로 빠져나오며 펴진다(바늘이 앞에 떠 있어 바늘에서 나오는 것처럼 보임). 아래 v17 설명의 나머지는 유지.
+   (v17) 대표: "미세한 흔들림은 어색. 조명은 그림자 지는 게 아님. 배경과 심볼 사이가 아니라 도형 자체에 공간감. 바늘이 도는 느낌은 좋다."
    - 흔들림 제거: 회전 끝의 넘침(오버슈트)과 시그니처 바늘 흔들림을 없애고, 한 번의 부드러운 감속으로 정북에 멈춘다.
    - 두께(옆면)·그림자 제거. 대신 N을 이루는 세 면이 회전하는 동안 각자 다른 깊이와 각도에 놓인다.
      바늘은 판들보다 살짝 앞으로 떠 있고, 두 사선 면은 자기 사선 축을 따라 서로 반대로 접혀 있다가(접힌 리본처럼), 정북에 닿으며 한 평면으로 펴진다.
@@ -147,15 +148,22 @@
 @keyframes kSwapB { 0%, 39.99% { visibility: hidden; } 40%, 100% { visibility: visible; } }
 @keyframes kOpen { 0%, 42% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 78%, 100% { scale: 1; } }
 /* 면마다 다른 깊이·각도(도형 자체의 공간감), 정북에서 한 평면으로 */
-@keyframes kF1 { 0%, 42% { translate: 0 0 calc(var(--zf) * -1); rotate: .351 -.936 0 30deg; --kp: .16; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 86%, 100% { translate: 0 0 0; rotate: .351 -.936 0 0deg; --kp: 0; } }
-@keyframes kF2 { 0%, 42% { translate: 0 0 calc(var(--zf) * -1); rotate: .351 -.936 0 -30deg; --kp: .04; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 86%, 100% { translate: 0 0 0; rotate: .351 -.936 0 0deg; --kp: 0; } }
-@keyframes kFn { 0%, 40% { translate: 0 0 0; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 60% { translate: 0 0 var(--zf); animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 86%, 100% { translate: 0 0 0; } }
+@keyframes kF1 { /* 바늘 뒤(안)에서 작게 시작해 왼쪽 자리로 나오며 펴짐 */
+  0%, 42% { translate: var(--o1) 0 calc(var(--zf) * -1); rotate: .351 -.936 0 30deg; --kp: .16; animation-timing-function: cubic-bezier(.22, .9, .28, 1); }
+  86%, 100% { translate: 0 0 0; rotate: .351 -.936 0 0deg; --kp: 0; }
+}
+@keyframes kF2 { /* 바늘 뒤(안)에서 작게 시작해 오른쪽 자리로 나오며 펴짐 */
+  0%, 46% { translate: var(--o2) 0 calc(var(--zf) * -1); rotate: .351 -.936 0 -30deg; --kp: .04; animation-timing-function: cubic-bezier(.22, .9, .28, 1); }
+  88%, 100% { translate: 0 0 0; rotate: .351 -.936 0 0deg; --kp: 0; }
+}
+@keyframes kFn { 0%, 40% { translate: 0 0 0; animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 56% { translate: 0 0 var(--zf); animation-timing-function: cubic-bezier(.45, 0, .55, 1); } 86%, 100% { translate: 0 0 0; } }
+@keyframes kOpen2 { 0%, 46% { scale: 0; animation-timing-function: cubic-bezier(.16, 1, .3, 1); } 82%, 100% { scale: 1; } }
 /* 시그니처: 처음 한 번 */
 .m-sq { left: 37.879%; animation: kGrow var(--in) both, kTwist var(--in) both, kSpin var(--in) both, kLitA var(--in) both, kSwapA var(--in) both; }
 .m-grp { transform-origin: 16.667% 50%; translate: 33.333% 0; visibility: hidden; animation: kGrp var(--in) linear both, kSwapB var(--in) both, mN var(--t) var(--in) infinite alternate; }
-.m-n { transform-origin: 16.667% 50%; scale: 0; }
-.m-n.n1 { animation: kOpen var(--in) both, kF1 var(--in) both; }
-.m-n.n2 { animation: kOpen var(--in) both, kF2 var(--in) both; }
+.m-n { scale: 0; --o1: 9.088%; --o2: -9.091%; }
+.m-n.n1 { transform-origin: 7.577% 50%; animation: kOpen var(--in) both, kF1 var(--in) both; }
+.m-n.n2 { transform-origin: 25.757% 50%; animation: kOpen2 var(--in) both, kF2 var(--in) both; }
 .m-nd { animation: kFn var(--in) both; }
 @keyframes mN { 0%, 10% { translate: 33.333% 0; animation-timing-function: cubic-bezier(.83, 0, .17, 1); } 52%, 100% { translate: 0 0; } }
 .m-w.w0 { transform-origin: 27.27% 50%; scale: 0; animation: mW0 var(--t) var(--in) infinite alternate; }
@@ -169,9 +177,9 @@
 /* 심볼 카드: 같은 흐름을 왕복(점은 남음) */
 .s-sq { left: 13.635%; animation: kGrow var(--t) infinite alternate both, kTwist var(--t) infinite alternate both, kSpin var(--t) infinite alternate both, kLitA var(--t) infinite alternate both, kSwapA var(--t) infinite alternate both; }
 .s-grp { transform-origin: 50% 50%; visibility: hidden; animation: kGrp var(--t) linear infinite alternate both, kSwapB var(--t) infinite alternate both; }
-.s-n { transform-origin: 50% 50%; scale: 0; }
-.s-n.n1 { animation: kOpen var(--t) infinite alternate both, kF1 var(--t) infinite alternate both; }
-.s-n.n2 { animation: kOpen var(--t) infinite alternate both, kF2 var(--t) infinite alternate both; }
+.s-n { scale: 0; --o1: 27.264%; --o2: -27.273%; }
+.s-n.n1 { transform-origin: 22.731% 50%; animation: kOpen var(--t) infinite alternate both, kF1 var(--t) infinite alternate both; }
+.s-n.n2 { transform-origin: 77.269% 50%; animation: kOpen2 var(--t) infinite alternate both, kF2 var(--t) infinite alternate both; }
 .s-nd { animation: kFn var(--t) infinite alternate both; }
 .id-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 24px 26px 26px; flex: 1; flex-wrap: wrap; }
 .id-meta > div:first-child { max-width: 560px; }
