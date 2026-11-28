@@ -434,25 +434,23 @@ html[data-theme="dark"] .marquee-track li.wm-emb img { filter: brightness(0) inv
 .contact-grid .sns-text { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 15px; }
 @media (max-width: 860px) { .site-footer .footer-right { align-items: flex-start; } }
 
-/* 연락처 재배치: 전화번호는 이메일 아래, 계열사·SNS 아이콘 (261128c) */
+/* 연락처 재배치: 전화번호는 이메일 아래, 주요 조직·SNS 아이콘 (261128d) */
 .contact-tel { display: flex; align-items: baseline; gap: 14px; margin-top: clamp(10px, 1.2vw, 18px); font-size: clamp(20px, 2.6vw, 40px); font-weight: 600; letter-spacing: -0.03em; }
 .contact-tel .ct-label { font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gray-2); }
 .contact-tel a { background: linear-gradient(currentColor, currentColor) 0 100% / 0 2px no-repeat; transition: background-size .5s var(--ease); }
 .contact-tel a:hover { background-size: 100% 2px; }
 .contact-grid { grid-template-columns: 3fr 1fr; gap: 24px clamp(24px, 3vw, 48px); }
-.family-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px 20px; }
-@media (max-width: 1200px) { .contact-grid { grid-template-columns: 2fr 1fr; } .family-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-.family-list a { display: flex; flex-direction: column; gap: 3px; }
-.family-list b { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; transition: opacity .2s; }
-.family-list .fm-desc { font-size: 13px; font-weight: 400; color: var(--gray-2); }
-.family-list a:hover b { opacity: .6; }
+.contact-grid dt { margin-bottom: 18px; }
+.contact-grid dt .ko { letter-spacing: 0.04em; }
+.family-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 32px; }
+.family-list li { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; line-height: 44px; white-space: nowrap; }
 .sns-lg { flex-wrap: wrap; gap: 8px; }
 .sns-lg a { width: 44px; height: 44px; color: var(--ink); }
 .sns-lg a:hover, .sns-lg a:focus-visible { background: var(--ink); color: var(--white); border-color: var(--ink); }
 .sns-lg svg { width: 18px; height: 18px; }
+@media (max-width: 1200px) { .contact-grid { grid-template-columns: 2fr 1fr; } .family-list { justify-content: flex-start; gap: 0 36px; } }
 @media (max-width: 860px) {
-  .contact-grid { grid-template-columns: 1fr; }
-  .family-list { grid-template-columns: repeat(2, 1fr); }
-  .family-list b { font-size: 15px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 32px; }
+  .family-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+  .family-list li { font-size: 15px; line-height: 36px; }
 }
-.contact-grid dt .ko { letter-spacing: 0.04em; }
